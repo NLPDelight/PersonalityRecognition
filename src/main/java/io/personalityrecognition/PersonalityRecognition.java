@@ -8,8 +8,14 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
 
 import opennlp.tools.tokenize.SimpleTokenizer;
 import opennlp.tools.tokenize.Tokenizer;
@@ -25,12 +31,52 @@ public class PersonalityRecognition {
 			InputStream text = new FileInputStream("en-token.bin");
 			TokenizerModel model = new TokenizerModel(text);
 			Tokenizer tokenizer = new TokenizerME(model);
-			
-			for(int i = 0; i < 100; i++) {
-				System.out.println(tokenizeString(data.get(i).get("STATUS"), tokenizer));
-			}
+			List<Map.Entry<String, Integer>> counts = sortCounts(getTokenCounts(tokenizer, "mypersonality_final.csv"));
+			printTokenCounts(counts);
 		} catch(Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public static List<Map.Entry<String, Integer>> sortCounts(Map<String, Integer> counts) {
+		LinkedList<Map.Entry<String, Integer>> rows = new LinkedList<>(counts.entrySet());
+		Comparator<Map.Entry<String, Integer>> comp = new Comparator<Map.Entry<String, Integer>>() {
+			public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+				return o1.getValue().compareTo(o2.getValue());
+			}
+		};
+		
+		Collections.sort(rows, comp);
+		
+		return rows;
+	}
+	
+	public static Map<String, Integer> getTokenCounts(Tokenizer tokenizer, String filename) throws Exception {
+		List<Map<String, String>> data = CSVMapper.mapCSV(new File(filename));
+		Map<String, Integer> counts = new HashMap<String, Integer>();
+		
+		for(Map<String, String> row : data) {
+			String[] tokens = tokenizer.tokenize(row.get("STATUS"));
+			addTokensToMap(tokens, counts);
+		}
+		
+		return counts;
+	}
+	
+	public static void printTokenCounts(List<Map.Entry<String, Integer>> counts) {
+		for(Map.Entry<String, Integer> count : counts) {
+			System.out.println(String.format("%s: %s", count.getKey(), count.getValue()));
+		}
+	}
+	
+	public static void addTokensToMap(String[] tokens, Map<String, Integer> map) {
+		for(int i = 0; i < tokens.length; i++) {
+			String word = tokens[i].toLowerCase();
+			if(map.containsKey(word)) {
+				map.put(word, map.get(word) + 1);
+			} else {
+				map.put(word, 1);
+			}
 		}
 	}
 	
