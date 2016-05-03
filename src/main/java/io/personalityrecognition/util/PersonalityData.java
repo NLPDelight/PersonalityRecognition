@@ -3,33 +3,33 @@ package io.personalityrecognition.util;
 import java.util.HashMap;
 
 public class PersonalityData {
-	
+
 	private String userId;
 	private double neurotic_score;
 	private double openness_score;
 	private double conscientiousness_score;
 	private double agreeableness_score;
 	private double extraversion_score;
-	private String neurotic_class;
-	private String openness_class;
-	private String conscientiousness_class;
-	private String agreeableness_class;
-	private String extraversion_class;
+	private boolean neurotic_class;
+	private boolean openness_class;
+	private boolean conscientiousness_class;
+	private boolean agreeableness_class;
+	private boolean extraversion_class;
 	private HashMap<String, Integer> wordCounts;
 	private HashMap<String, Double> wordFrequencies;
 	private int tokenCount;
-	
+
 	public PersonalityData() {
 		wordCounts = new HashMap<String, Integer>();
 		wordFrequencies = new HashMap<String, Double>();
 	}
-	
+
 	public PersonalityData(String userId) {
 		wordCounts = new HashMap<String, Integer>();
 		wordFrequencies = new HashMap<String, Double>();
 		this.userId = userId;
 	}
-	
+
 	public PersonalityData addToWordCount(String word, int count) {
 		if(wordCounts.containsKey(word))
 			wordCounts.put(word, wordCounts.get(word) + count);
@@ -38,14 +38,14 @@ public class PersonalityData {
 		tokenCount += count;
 		return this;
 	}
-	
+
 	public PersonalityData normalize() {
 		for(String word : wordCounts.keySet()) {
 			wordFrequencies.put(word, ((double) wordCounts.get(word)) / ((double) tokenCount));
 		}
 		return this;
 	}
-	
+
 	public String getUserId() {
 		return userId;
 	}
@@ -88,39 +88,39 @@ public class PersonalityData {
 		this.extraversion_score = extraversion_score;
 		return this;
 	}
-	public String isNeurotic_class() {
+	public boolean isNeurotic_class() {
 		return neurotic_class;
 	}
 	public PersonalityData setNeurotic_class(String neurotic_class) {
-		this.neurotic_class = neurotic_class;
+		this.neurotic_class = _yNChecker(neurotic_class);
 		return this;
 	}
-	public String isOpenness_class() {
+	public boolean isOpenness_class() {
 		return openness_class;
 	}
 	public PersonalityData setOpenness_class(String openness_class) {
-		this.openness_class = openness_class;
+		this.openness_class = _yNChecker(openness_class);
 		return this;
 	}
-	public String isConscientiousness_class() {
+	public boolean isConscientiousness_class() {
 		return conscientiousness_class;
 	}
 	public PersonalityData setConscientiousness_class(String conscientiousness_class) {
-		this.conscientiousness_class = conscientiousness_class;
+		this.conscientiousness_class = _yNChecker(conscientiousness_class);
 		return this;
 	}
-	public String isAgreeableness_class() {
+	public boolean isAgreeableness_class() {
 		return agreeableness_class;
 	}
 	public PersonalityData setAgreeableness_class(String agreeableness_class) {
-		this.agreeableness_class = agreeableness_class;
+		this.agreeableness_class = _yNChecker(agreeableness_class);
 		return this;
 	}
-	public String isExtraversion_class() {
+	public boolean isExtraversion_class() {
 		return extraversion_class;
 	}
 	public PersonalityData setExtraversion_class(String extraversion_class) {
-		this.extraversion_class = extraversion_class;
+		this.extraversion_class = _yNChecker(extraversion_class);
 		return this;
 	}
 	public HashMap<String, Integer> getWordFrequency() {
@@ -136,6 +136,13 @@ public class PersonalityData {
 	public PersonalityData setTokenCount(int tokenCount) {
 		this.tokenCount = tokenCount;
 		return this;
+	}
+
+	private boolean _yNChecker(String input) {
+		if (input.equals("y")) {
+			return true;
+		}
+		return false;
 	}
 
 }
