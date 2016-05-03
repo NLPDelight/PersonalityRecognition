@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import opennlp.tools.tokenize.SimpleTokenizer;
 import opennlp.tools.tokenize.Tokenizer;
@@ -45,6 +46,21 @@ public class TypeCounter {
 	
 	public String[] tokenize(String line) {
 		return tokenizer.tokenize(line);
+	}
+	
+	public Map<String, Integer> countTypesInSet(String line, Set<String> words) {
+		String[] tokens = tokenizer.tokenize(line);
+		return countTypesInSet(tokens, words);
+	}
+	
+	private Map<String, Integer> countTypesInSet(String[] tokens, Set<String> lexicon) {
+		Map<String, Integer> counts = new HashMap<String, Integer>();
+		for(int i = 0; i < tokens.length; i++) {
+			String token = tokens[i];
+			if(lexicon.contains(token))
+				addTokenToCounts(token, counts);
+		}
+		return counts;
 	}
 	
 	public Map<String, Integer> countTypes(String line) {
