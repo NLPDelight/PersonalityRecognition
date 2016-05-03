@@ -47,6 +47,10 @@ public class DataShaper {
 		return this;
 	}
 	
+	public HashMap<String, PersonalityData> getUsers() {
+		return users;
+	}
+	
 	private void calculateUserWordFrequencies() {
 		for(String id : users.keySet()) {
 			users.put(id, users.get(id).normalize());
