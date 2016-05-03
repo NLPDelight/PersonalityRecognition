@@ -55,8 +55,9 @@ public class TypeCounter {
 	private Map<String, Integer> countTypes(String[] tokens) {
 		Map<String, Integer> counts = new HashMap<String, Integer>();
 		for(int i = 0; i < tokens.length; i++) {
-			if(!stopwords.contains(tokens[i]))
-				addTokenToCounts(tokens[i].toLowerCase(), counts);
+			String token = tokens[i].toLowerCase();
+			if(!stopwords.contains(token))
+				addTokenToCounts(token, counts);
 		}
 		return counts;
 	}
