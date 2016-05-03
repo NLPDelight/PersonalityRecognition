@@ -103,6 +103,7 @@ public class DataShaper {
 		String statusText = row.get(TEXT);
 		Map<String, Integer> counts = typeCounter.countTypesInSet(statusText, acceptedTokens);
 		PersonalityData user = users.get(id);
+		user.addPost(statusText);
 		
 		for(String word : counts.keySet()) {
 			user.addToWordCount(word, counts.get(word));

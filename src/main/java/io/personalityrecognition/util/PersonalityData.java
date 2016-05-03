@@ -1,6 +1,7 @@
 package io.personalityrecognition.util;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class PersonalityData {
 
@@ -15,6 +16,7 @@ public class PersonalityData {
 	private boolean conscientiousness_class;
 	private boolean agreeableness_class;
 	private boolean extraversion_class;
+	private HashSet<String> posts;
 	private HashMap<String, Integer> wordCounts;
 	private HashMap<String, Double> wordFrequencies;
 	private int tokenCount;
@@ -43,6 +45,11 @@ public class PersonalityData {
 		for(String word : wordCounts.keySet()) {
 			wordFrequencies.put(word, ((double) wordCounts.get(word)) / ((double) tokenCount));
 		}
+		return this;
+	}
+
+	public PersonalityData addPost(String post) {
+		this.posts.add(post);
 		return this;
 	}
 
