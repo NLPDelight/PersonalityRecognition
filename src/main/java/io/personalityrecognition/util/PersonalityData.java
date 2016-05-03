@@ -26,6 +26,7 @@ public class PersonalityData {
 	
 	public PersonalityData(String userId) {
 		wordCounts = new HashMap<String, Integer>();
+		wordFrequencies = new HashMap<String, Double>();
 		this.userId = userId;
 	}
 	

@@ -43,17 +43,24 @@ public class DataShaper {
 	public DataShaper shapeData() throws IOException {
 		determineAcceptedTokens();
 		aggregateDataByUser();
+		calculateUserWordFrequencies();
 		return this;
+	}
+	
+	private void calculateUserWordFrequencies() {
+		for(String id : users.keySet()) {
+			users.put(id, users.get(id).normalize());
+		}
 	}
 	
 	private void aggregateDataByUser() throws IOException {
 		List<Map<String, String>> data = CSVMapper.mapCSV(new File(filename));
 		for(Map<String, String> row : data) {
-			addRowToUserData(row);
+			updateUserValues(row);
 		}
 	}
 	
-	private void addRowToUserData(Map<String, String> row) {
+	private void updateUserValues(Map<String, String> row) {
 		String id = row.get(ID);
 		if(users.containsKey(id)) {
 			addWordsToUser(row);
