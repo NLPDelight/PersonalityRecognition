@@ -1,6 +1,7 @@
 package io.personalityrecognition;
 
 import io.personalityrecognition.util.CSVMapper;
+import io.personalityrecognition.util.TypeCounter;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -25,14 +26,10 @@ import opennlp.tools.tokenize.TokenizerModel;
 public class PersonalityRecognition {
 
 	public static void main(String args[]) {
-		File csv = new File("mypersonality_final.csv");
 		try {
-			List<Map<String, String>> data = CSVMapper.mapCSV(csv);
-			InputStream text = new FileInputStream("en-token.bin");
-			TokenizerModel model = new TokenizerModel(text);
-			Tokenizer tokenizer = new TokenizerME(model);
-			List<Map.Entry<String, Integer>> counts = sortCounts(getTokenCounts(tokenizer, "mypersonality_final.csv"));
-			printTokenCounts(counts);
+			TypeCounter counter = new TypeCounter("en-token.bin", "stopwordList.txt");
+			List<Map.Entry<String, Integer>> counts = sortCounts(getTokenCounts(counter, "mypersonality_final.csv"));
+			printTopNTokenCounts(1000, counts);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -42,7 +39,7 @@ public class PersonalityRecognition {
 		LinkedList<Map.Entry<String, Integer>> rows = new LinkedList<>(counts.entrySet());
 		Comparator<Map.Entry<String, Integer>> comp = new Comparator<Map.Entry<String, Integer>>() {
 			public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-				return o1.getValue().compareTo(o2.getValue());
+				return o2.getValue().compareTo(o1.getValue());
 			}
 		};
 		
@@ -51,21 +48,29 @@ public class PersonalityRecognition {
 		return rows;
 	}
 	
-	public static Map<String, Integer> getTokenCounts(Tokenizer tokenizer, String filename) throws Exception {
+	public static Map<String, Integer> getTokenCounts(TypeCounter counter, String filename) throws Exception {
 		List<Map<String, String>> data = CSVMapper.mapCSV(new File(filename));
 		Map<String, Integer> counts = new HashMap<String, Integer>();
 		
 		for(Map<String, String> row : data) {
-			String[] tokens = tokenizer.tokenize(row.get("STATUS"));
-			addTokensToMap(tokens, counts);
+			addCounts(counts, counter.countTypes(row.get("STATUS")));
 		}
 		
 		return counts;
 	}
 	
-	public static void printTokenCounts(List<Map.Entry<String, Integer>> counts) {
-		for(Map.Entry<String, Integer> count : counts) {
-			System.out.println(String.format("%s: %s", count.getKey(), count.getValue()));
+	public static void printTopNTokenCounts(int n, List<Map.Entry<String, Integer>> counts) {
+		int numberOfTypes = counts.size();
+		
+		if(numberOfTypes <= n) {
+			for(Map.Entry<String, Integer> count : counts) {
+				System.out.println(String.format("%s: %s", count.getKey(), count.getValue()));
+			}
+		} else {
+			for(int i = 0; i < n; i++) {
+				Map.Entry<String, Integer> count = counts.get(i);
+				System.out.println(String.format("%s: %s", count.getKey(), count.getValue()));
+			}
 		}
 	}
 	
@@ -77,6 +82,15 @@ public class PersonalityRecognition {
 			} else {
 				map.put(word, 1);
 			}
+		}
+	}
+	
+	public static void addCounts(Map<String, Integer> target, Map<String, Integer> source) {
+		for(String key : source.keySet()) {
+			if(target.containsKey(key))
+				target.put(key, target.get(key) + source.get(key));
+			else
+				target.put(key, source.get(key));
 		}
 	}
 	
