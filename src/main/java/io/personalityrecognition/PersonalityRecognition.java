@@ -2,6 +2,8 @@ package io.personalityrecognition;
 
 import io.personalityrecognition.util.CSVMapper;
 import io.personalityrecognition.util.DataShaper;
+import io.personalityrecognition.util.PersonalityData;
+import io.personalityrecognition.util.PersonalityDataWriter;
 import io.personalityrecognition.util.TypeCounter;
 
 import java.io.ByteArrayInputStream;
@@ -13,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -29,9 +32,13 @@ public class PersonalityRecognition {
 	public static void main(String args[]) {
 		try {
 			DataShaper shaper = new DataShaper("mypersonality_final.csv");
-			shaper.shapeData();
+			HashMap<String, PersonalityData> data = shaper.shapeData().getUsers();
+			HashSet<String> words = new HashSet<String>();
+			for(Map.Entry<String, PersonalityData> row : data.entrySet()) {
+				words.addAll(row.getValue().getWordCounts().keySet());
+			}
+			PersonalityDataWriter.writeFile(setToAlphabeticalList(words), data, "massagedData.csv");
 			
-			System.out.println("data shaped!");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -50,6 +57,12 @@ public class PersonalityRecognition {
 				System.out.println(String.format("%s: %s", count.getKey(), count.getValue()));
 			}
 		}
+	}
+	
+	public static LinkedList<String> setToAlphabeticalList(Set<String> words) {
+		LinkedList<String> orderedWords = new LinkedList<String>(words);
+		Collections.sort(orderedWords);
+		return orderedWords;
 	}
 	
 	public static String encapsulateToken(String s) {

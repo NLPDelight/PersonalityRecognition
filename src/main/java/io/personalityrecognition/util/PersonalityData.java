@@ -2,20 +2,21 @@ package io.personalityrecognition.util;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class PersonalityData {
 
 	private String userId;
-	private double neurotic_score;
-	private double openness_score;
-	private double conscientiousness_score;
-	private double agreeableness_score;
-	private double extraversion_score;
-	private boolean neurotic_class;
-	private boolean openness_class;
-	private boolean conscientiousness_class;
-	private boolean agreeableness_class;
-	private boolean extraversion_class;
+	private double neuroticScore;
+	private double opennessScore;
+	private double conscientiousnessScore;
+	private double agreeablenessScore;
+	private double extraversionScore;
+	private boolean neuroticClass;
+	private boolean opennessClass;
+	private boolean conscientiousnessClass;
+	private boolean agreeablenessClass;
+	private boolean extraversionClass;
 	private HashSet<String> posts;
 	private HashMap<String, Integer> wordCounts;
 	private HashMap<String, Double> wordFrequencies;
@@ -24,11 +25,13 @@ public class PersonalityData {
 	public PersonalityData() {
 		wordCounts = new HashMap<String, Integer>();
 		wordFrequencies = new HashMap<String, Double>();
+		posts = new HashSet<String>();
 	}
 
 	public PersonalityData(String userId) {
 		wordCounts = new HashMap<String, Integer>();
 		wordFrequencies = new HashMap<String, Double>();
+		posts = new HashSet<String>();
 		this.userId = userId;
 	}
 
@@ -60,82 +63,85 @@ public class PersonalityData {
 		this.userId = userId;
 		return this;
 	}
-	public double getNeurotic_score() {
-		return neurotic_score;
+	public double getNeuroticScore() {
+		return neuroticScore;
 	}
-	public PersonalityData setNeurotic_score(double neurotic_score) {
-		this.neurotic_score = neurotic_score;
+	public PersonalityData setNeuroticScore(double neurotic_score) {
+		this.neuroticScore = neurotic_score;
 		return this;
 	}
-	public double getOpenness_score() {
-		return openness_score;
+	public double getOpennessScore() {
+		return opennessScore;
 	}
-	public PersonalityData setOpenness_score(double openness_score) {
-		this.openness_score = openness_score;
+	public PersonalityData setOpennessScore(double openness_score) {
+		this.opennessScore = openness_score;
 		return this;
 	}
-	public double getConscientiousness_score() {
-		return conscientiousness_score;
+	public double getConscientiousnessScore() {
+		return conscientiousnessScore;
 	}
-	public PersonalityData setConscientiousness_score(double conscientiousness_score) {
-		this.conscientiousness_score = conscientiousness_score;
+	public PersonalityData setConscientiousnessScore(double conscientiousness_score) {
+		this.conscientiousnessScore = conscientiousness_score;
 		return this;
 	}
-	public double getAgreeableness_score() {
-		return agreeableness_score;
+	public double getAgreeablenessScore() {
+		return agreeablenessScore;
 	}
-	public PersonalityData setAgreeableness_score(double agreeableness_score) {
-		this.agreeableness_score = agreeableness_score;
+	public PersonalityData setAgreeablenessScore(double agreeableness_score) {
+		this.agreeablenessScore = agreeableness_score;
 		return this;
 	}
-	public double getExtraversion_score() {
-		return extraversion_score;
+	public double getExtraversionScore() {
+		return extraversionScore;
 	}
-	public PersonalityData setExtraversion_score(double extraversion_score) {
-		this.extraversion_score = extraversion_score;
+	public PersonalityData setExtraversionScore(double extraversion_score) {
+		this.extraversionScore = extraversion_score;
 		return this;
 	}
-	public boolean isNeurotic_class() {
-		return neurotic_class;
+	public boolean isNeurotic() {
+		return neuroticClass;
 	}
-	public PersonalityData setNeurotic_class(String neurotic_class) {
-		this.neurotic_class = _yNChecker(neurotic_class);
+	public PersonalityData isNeurotic(String neurotic_class) {
+		this.neuroticClass = _yNChecker(neurotic_class);
 		return this;
 	}
-	public boolean isOpenness_class() {
-		return openness_class;
+	public boolean isOpen() {
+		return opennessClass;
 	}
-	public PersonalityData setOpenness_class(String openness_class) {
-		this.openness_class = _yNChecker(openness_class);
+	public PersonalityData isOpen(String openness_class) {
+		this.opennessClass = _yNChecker(openness_class);
 		return this;
 	}
-	public boolean isConscientiousness_class() {
-		return conscientiousness_class;
+	public boolean isConscientious() {
+		return conscientiousnessClass;
 	}
-	public PersonalityData setConscientiousness_class(String conscientiousness_class) {
-		this.conscientiousness_class = _yNChecker(conscientiousness_class);
+	public PersonalityData isConscientious(String conscientiousness_class) {
+		this.conscientiousnessClass = _yNChecker(conscientiousness_class);
 		return this;
 	}
-	public boolean isAgreeableness_class() {
-		return agreeableness_class;
+	public boolean isAgreeable() {
+		return agreeablenessClass;
 	}
-	public PersonalityData setAgreeableness_class(String agreeableness_class) {
-		this.agreeableness_class = _yNChecker(agreeableness_class);
+	public PersonalityData isAgreeable(String agreeableness_class) {
+		this.agreeablenessClass = _yNChecker(agreeableness_class);
 		return this;
 	}
-	public boolean isExtraversion_class() {
-		return extraversion_class;
+	public boolean isExtraverted() {
+		return extraversionClass;
 	}
-	public PersonalityData setExtraversion_class(String extraversion_class) {
-		this.extraversion_class = _yNChecker(extraversion_class);
+	public PersonalityData isExtraverted(String extraversion_class) {
+		this.extraversionClass = _yNChecker(extraversion_class);
 		return this;
 	}
-	public HashMap<String, Integer> getWordFrequency() {
+	public HashMap<String, Integer> getWordCounts() {
 		return wordCounts;
 	}
-	public PersonalityData setWordFrequency(HashMap<String, Integer> wordFrequency) {
+	public PersonalityData setWordCounts(HashMap<String, Integer> wordCounts) {
 		this.wordCounts = wordCounts;
 		return this;
+	}
+	public HashMap<String, Double> getWordFrequencies() {
+		return wordFrequencies;
 	}
 	public int getTokenCount() {
 		return tokenCount;

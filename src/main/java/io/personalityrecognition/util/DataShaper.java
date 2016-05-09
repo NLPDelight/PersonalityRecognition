@@ -84,16 +84,16 @@ public class DataShaper {
 		PersonalityData newUser = new PersonalityData(row.get(ID));
 
 		newUser
-			.setAgreeableness_class(row.get(AGREEABLENESS_CLASS))
-			.setOpenness_class(row.get(OPENNESS_CLASS))
-			.setExtraversion_class(row.get(EXTRAVERT_CLASS))
-			.setNeurotic_class(row.get(NEUROTIC_CLASS))
-			.setConscientiousness_class(row.get(CONSCIENTIOUSNESS_CLASS))
-			.setAgreeableness_score(Double.parseDouble(row.get(AGREEABLENESS_SCORE)))
-			.setOpenness_score(Double.parseDouble(row.get(OPENNESS_SCORE)))
-			.setExtraversion_score(Double.parseDouble(row.get(EXTRAVERT_SCORE)))
-			.setNeurotic_score(Double.parseDouble(row.get(NEUROTIC_SCORE)))
-			.setConscientiousness_score(Double.parseDouble(row.get(CONSCIENTIOUSNESS_SCORE)));
+			.isAgreeable(row.get(AGREEABLENESS_CLASS))
+			.isOpen(row.get(OPENNESS_CLASS))
+			.isExtraverted(row.get(EXTRAVERT_CLASS))
+			.isNeurotic(row.get(NEUROTIC_CLASS))
+			.isConscientious(row.get(CONSCIENTIOUSNESS_CLASS))
+			.setAgreeablenessScore(Double.parseDouble(row.get(AGREEABLENESS_SCORE)))
+			.setOpennessScore(Double.parseDouble(row.get(OPENNESS_SCORE)))
+			.setExtraversionScore(Double.parseDouble(row.get(EXTRAVERT_SCORE)))
+			.setNeuroticScore(Double.parseDouble(row.get(NEUROTIC_SCORE)))
+			.setConscientiousnessScore(Double.parseDouble(row.get(CONSCIENTIOUSNESS_SCORE)));
 
 		return newUser;
 	}
