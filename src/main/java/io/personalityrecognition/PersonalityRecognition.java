@@ -1,31 +1,16 @@
 package io.personalityrecognition;
 
-import io.personalityrecognition.util.CSVMapper;
 import io.personalityrecognition.util.DataShaper;
 import io.personalityrecognition.util.PersonalityData;
 import io.personalityrecognition.util.PersonalityDataWriter;
-import io.personalityrecognition.util.TypeCounter;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Set;
-
-import opennlp.tools.tokenize.SimpleTokenizer;
-import opennlp.tools.tokenize.Tokenizer;
-import opennlp.tools.tokenize.TokenizerME;
-import opennlp.tools.tokenize.TokenizerModel;
 
 public class PersonalityRecognition {
 
@@ -45,7 +30,22 @@ public class PersonalityRecognition {
 			for(String word : acceptedWords) {
 				System.out.println(word);
 			}
-			PersonalityDataWriter.writeFile(alpha, data, "massagedData.csv");
+			
+			HashMap<String, PersonalityData> train = new HashMap<>();
+			HashMap<String, PersonalityData> test = new HashMap<>();
+			Set<Map.Entry<String, PersonalityData>> entries = data.entrySet();
+			int i = 0;
+			
+			for(Map.Entry<String, PersonalityData> row : entries) {
+				if(i < 200)
+					train.put(row.getKey(), row.getValue());
+				else
+					test.put(row.getKey(), row.getValue());
+				i++;
+			}
+			
+			PersonalityDataWriter.writeFile(alpha, train, "train.csv");
+			PersonalityDataWriter.writeFile(alpha, test, "test.csv");
 			
 		} catch(Exception e) {
 			e.printStackTrace();
