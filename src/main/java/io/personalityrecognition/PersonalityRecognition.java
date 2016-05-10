@@ -34,10 +34,18 @@ public class PersonalityRecognition {
 			DataShaper shaper = new DataShaper("mypersonality_final.csv");
 			HashMap<String, PersonalityData> data = shaper.shapeData().getUsers();
 			HashSet<String> words = new HashSet<String>();
+			HashSet<String> acceptedWords = shaper.getAcceptedTokens();
 			for(Map.Entry<String, PersonalityData> row : data.entrySet()) {
 				words.addAll(row.getValue().getWordCounts().keySet());
 			}
-			PersonalityDataWriter.writeFile(setToAlphabeticalList(words), data, "massagedData.csv");
+			List<String> alpha = setToAlphabeticalList(words);
+			System.out.println("In shaper: " + acceptedWords.size());
+			System.out.println("In data: " + words.size());
+			acceptedWords.removeAll(words);
+			for(String word : acceptedWords) {
+				System.out.println(word);
+			}
+			PersonalityDataWriter.writeFile(alpha, data, "massagedData.csv");
 			
 		} catch(Exception e) {
 			e.printStackTrace();

@@ -50,6 +50,10 @@ public class DataShaper {
 	public HashMap<String, PersonalityData> getUsers() {
 		return users;
 	}
+	
+	public HashSet<String> getAcceptedTokens() {
+		return acceptedTokens;
+	}
 
 	private void calculateUserWordFrequencies() {
 		for(String id : users.keySet()) {

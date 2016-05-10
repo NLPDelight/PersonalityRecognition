@@ -56,7 +56,7 @@ public class TypeCounter {
 	private Map<String, Integer> countTypesInSet(String[] tokens, Set<String> lexicon) {
 		Map<String, Integer> counts = new HashMap<String, Integer>();
 		for(int i = 0; i < tokens.length; i++) {
-			String token = tokens[i];
+			String token = tokens[i].toLowerCase();
 			if(lexicon.contains(token))
 				addTokenToCounts(token, counts);
 		}
