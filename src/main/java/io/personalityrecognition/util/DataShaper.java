@@ -14,7 +14,6 @@ import java.util.Set;
 public class DataShaper {
 
 	private static final String LANGUAGE_MODEL = "en-token.bin";
-	private static final String STOPWORDS = "stopwordList.txt";
 	private static final String ID = "#AUTHID";
 	private static final String TEXT = "STATUS";
 	private static final String EXTRAVERT_SCORE = "sEXT";
@@ -35,7 +34,7 @@ public class DataShaper {
 
 	public DataShaper(String filename) throws IOException {
 		this.filename = filename;
-		typeCounter = new TypeCounter(LANGUAGE_MODEL, STOPWORDS);
+		typeCounter = new TypeCounter(LANGUAGE_MODEL);
 		users = new HashMap<String, PersonalityData>();
 		acceptedTokens = new HashSet<String>();
 	}
