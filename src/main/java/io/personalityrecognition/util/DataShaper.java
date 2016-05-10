@@ -35,8 +35,8 @@ public class DataShaper {
 	public DataShaper(String filename) throws IOException {
 		this.filename = filename;
 		typeCounter = new TypeCounter(LANGUAGE_MODEL);
-		users = new HashMap<String, PersonalityData>();
-		acceptedTokens = new HashSet<String>();
+		users = new HashMap<>();
+		acceptedTokens = new HashSet<>();
 	}
 
 	public DataShaper shapeData() throws IOException {
