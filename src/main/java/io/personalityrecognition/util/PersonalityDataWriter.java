@@ -27,7 +27,7 @@ public class PersonalityDataWriter{
 	
 	public static void writeFile(List<String> wordsToShow, Map<String, PersonalityData> data, String filename) throws IOException {
 		BufferedWriter csvWriter = new BufferedWriter(new FileWriter(filename));
-		csvWriter.append(getHeaderRow(wordsToShow));
+		csvWriter.append(getHeaderRow(wordsToShow) + "\n");
 		for(String id : data.keySet()) {
 			PersonalityData row = data.get(id);
 			row.normalize();
