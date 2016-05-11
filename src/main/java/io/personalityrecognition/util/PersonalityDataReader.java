@@ -11,30 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class PersonalityDataReader {
+import static io.personalityrecognition.util.DatasetKeys.*;
 
-	private static final String ID = "#AUTHID";
-	private static final String TEXT = "STATUS";
-	private static final String EXTRAVERT_SCORE = "sEXT";
-	private static final String OPENNESS_SCORE = "sOPN";
-	private static final String NEUROTIC_SCORE = "sNEU";
-	private static final String CONSCIENTIOUSNESS_SCORE = "sCON";
-	private static final String AGREEABLENESS_SCORE = "sAGR";
-	private static final String EXTRAVERT_CLASS = "cEXT";
-	private static final String OPENNESS_CLASS = "cOPN";
-	private static final String NEUROTIC_CLASS = "cNEU";
-	private static final String CONSCIENTIOUSNESS_CLASS = "cCON";
-	private static final String AGREEABLENESS_CLASS = "cAGR";
-	private static final String POSTS = "posts";
-	private static final HashSet<String> TRAIT_CLASSES;
-	private static final HashSet<String> TRAIT_SCORES;
-	
-	static {
-		TRAIT_CLASSES = new HashSet<>(Arrays.asList(EXTRAVERT_CLASS, OPENNESS_CLASS, NEUROTIC_CLASS,
-				CONSCIENTIOUSNESS_CLASS, AGREEABLENESS_CLASS));
-		TRAIT_SCORES = new HashSet<>(Arrays.asList(EXTRAVERT_SCORE, OPENNESS_SCORE, NEUROTIC_SCORE,
-				CONSCIENTIOUSNESS_SCORE, AGREEABLENESS_SCORE));
-	}
+public class PersonalityDataReader {
 	
 	public static HashMap<String, PersonalityData> readPersonalityData(String filename) throws FileNotFoundException,
 			UnsupportedEncodingException, IOException {

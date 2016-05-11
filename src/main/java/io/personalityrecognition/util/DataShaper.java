@@ -11,22 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class DataShaper {
+import static io.personalityrecognition.util.DatasetKeys.*;
 
-	private static final String LANGUAGE_MODEL = "en-token.bin";
-	private static final String STOPWORDS = "stopwordList.txt";
-	private static final String ID = "#AUTHID";
-	private static final String TEXT = "STATUS";
-	private static final String EXTRAVERT_SCORE = "sEXT";
-	private static final String OPENNESS_SCORE = "sOPN";
-	private static final String NEUROTIC_SCORE = "sNEU";
-	private static final String CONSCIENTIOUSNESS_SCORE = "sCON";
-	private static final String AGREEABLENESS_SCORE = "sAGR";
-	private static final String EXTRAVERT_CLASS = "cEXT";
-	private static final String OPENNESS_CLASS = "cOPN";
-	private static final String NEUROTIC_CLASS = "cNEU";
-	private static final String CONSCIENTIOUSNESS_CLASS = "cCON";
-	private static final String AGREEABLENESS_CLASS = "cAGR";
+public class DataShaper {
 
 	private TypeCounter typeCounter;
 	private HashSet<String> acceptedTokens;
