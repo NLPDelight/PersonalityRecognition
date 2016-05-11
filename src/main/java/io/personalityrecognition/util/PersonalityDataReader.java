@@ -25,6 +25,7 @@ public class PersonalityDataReader {
 	private static final String NEUROTIC_CLASS = "cNEU";
 	private static final String CONSCIENTIOUSNESS_CLASS = "cCON";
 	private static final String AGREEABLENESS_CLASS = "cAGR";
+	private static final String POSTS = "posts";
 	private static final HashSet<String> TRAIT_CLASSES;
 	private static final HashSet<String> TRAIT_SCORES;
 	
@@ -61,6 +62,12 @@ public class PersonalityDataReader {
 			.setExtraversionScore(Double.parseDouble(row.get(EXTRAVERT_SCORE)))
 			.setNeuroticScore(Double.parseDouble(row.get(NEUROTIC_SCORE)))
 			.setConscientiousnessScore(Double.parseDouble(row.get(CONSCIENTIOUSNESS_SCORE)));
+
+		String raw = row.get(POSTS);
+
+		for (String s : raw.split("\n")) {
+			newUser.addPost(s);
+		}
 		
 		addWordFrequenciesToUser(row, newUser);
 		
@@ -76,6 +83,7 @@ public class PersonalityDataReader {
 	
 	private static Set<String> getWordColumns(Map<String, String> row) {
 		Set<String> words = row.keySet();
+		words.remove(POSTS);
 		words.removeAll(TRAIT_CLASSES);
 		words.removeAll(TRAIT_SCORES);
 		words.remove(ID);
