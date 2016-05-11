@@ -21,17 +21,20 @@ public class PersonalityData {
 	private HashMap<String, Integer> wordCounts;
 	private HashMap<String, Double> wordFrequencies;
 	private int tokenCount;
+	private String combinedText;
 
 	public PersonalityData() {
 		wordCounts = new HashMap<String, Integer>();
 		wordFrequencies = new HashMap<String, Double>();
 		posts = new HashSet<String>();
+		combinedText = "";
 	}
 
 	public PersonalityData(String userId) {
 		wordCounts = new HashMap<String, Integer>();
 		wordFrequencies = new HashMap<String, Double>();
 		posts = new HashSet<String>();
+		combinedText = "";
 		this.userId = userId;
 	}
 
@@ -41,6 +44,20 @@ public class PersonalityData {
 		else
 			wordCounts.put(word, count);
 		tokenCount += count;
+		return this;
+	}
+	
+	public PersonalityData addToCombinedText(String post) {
+		combinedText += " " + post;
+		return this;
+	}
+	
+	public String getCombinedText() {
+		return combinedText;
+	}
+	
+	public PersonalityData setCombinedText(String combinedText) {
+		this.combinedText = combinedText;
 		return this;
 	}
 

@@ -105,8 +105,9 @@ public class DataShaper {
 	private void addWordsToUser(Map<String, String> row) {
 		String id = row.get(ID);
 		String statusText = row.get(TEXT);
-		Map<String, Integer> counts = typeCounter.countTypesInSet(statusText, acceptedTokens);
 		PersonalityData user = users.get(id);
+		user.addToCombinedText(statusText);
+		Map<String, Integer> counts = typeCounter.countTypesInSet(statusText, acceptedTokens);
 		user.addPost(statusText);
 
 		for(String word : counts.keySet()) {

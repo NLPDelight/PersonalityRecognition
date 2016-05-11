@@ -24,6 +24,7 @@ public class PersonalityDataWriter{
 	private static final String NEUROTIC_CLASS = "cNEU";
 	private static final String CONSCIENTIOUSNESS_CLASS = "cCON";
 	private static final String AGREEABLENESS_CLASS = "cAGR";
+	private static final String COMBINED_TEXT = "Raw Text";
 	
 	public static void writeFile(List<String> wordsToShow, Map<String, PersonalityData> data, String filename) throws IOException {
 		BufferedWriter csvWriter = new BufferedWriter(new FileWriter(filename));
@@ -50,7 +51,8 @@ public class PersonalityDataWriter{
 				wrapInQuotes(NEUROTIC_SCORE) + "," +
 				wrapInQuotes(AGREEABLENESS_SCORE) + "," +
 				wrapInQuotes(CONSCIENTIOUSNESS_SCORE) + "," +
-				wrapInQuotes(OPENNESS_SCORE) +
+				wrapInQuotes(OPENNESS_SCORE) + "," +
+				wrapInQuotes(COMBINED_TEXT) + "," +
 				wordsToCSV(wordsToShow);
 	}
 	
@@ -76,7 +78,8 @@ public class PersonalityDataWriter{
 				data.getNeuroticScore() + "," +
 				data.getAgreeablenessScore() + "," +
 				data.getConscientiousnessScore() + "," +
-				data.getOpennessScore();
+				data.getOpennessScore() + "," +
+				wrapInQuotes(data.getCombinedText());
 		return csvString + frequenciesToCSV(data, wordsToShow);
 	}
 	
