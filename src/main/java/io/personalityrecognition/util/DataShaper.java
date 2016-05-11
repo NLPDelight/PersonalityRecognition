@@ -106,7 +106,6 @@ public class DataShaper {
 		String id = row.get(ID);
 		String statusText = row.get(TEXT);
 		PersonalityData user = users.get(id);
-		user.addToCombinedText(statusText);
 		Map<String, Integer> counts = typeCounter.countTypesInSet(statusText, acceptedTokens);
 		user.addPost(statusText);
 
