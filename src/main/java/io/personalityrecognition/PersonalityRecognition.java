@@ -17,37 +17,6 @@ public class PersonalityRecognition {
 
 	public static void main(String args[]) {
 		try {
-			
-//			DataShaper shaper = new DataShaper("mypersonality_final.csv");
-//			HashMap<String, PersonalityData> data = shaper.shapeData().getUsers();
-//			HashSet<String> words = new HashSet<String>();
-//			HashSet<String> acceptedWords = shaper.getAcceptedTokens();
-//			for(Map.Entry<String, PersonalityData> row : data.entrySet()) {
-//				words.addAll(row.getValue().getWordCounts().keySet());
-//			}
-//			List<String> alpha = setToAlphabeticalList(words);
-//			System.out.println("In shaper: " + acceptedWords.size());
-//			System.out.println("In data: " + words.size());
-//			acceptedWords.removeAll(words);
-//			for(String word : acceptedWords) {
-//				System.out.println(word);
-//			}
-//			
-//			HashMap<String, PersonalityData> train = new HashMap<>();
-//			HashMap<String, PersonalityData> test = new HashMap<>();
-//			Set<Map.Entry<String, PersonalityData>> entries = data.entrySet();
-//			int i = 0;
-//			
-//			for(Map.Entry<String, PersonalityData> row : entries) {
-//				if(i < 200)
-//					train.put(row.getKey(), row.getValue());
-//				else
-//					test.put(row.getKey(), row.getValue());
-//				i++;
-//			}
-//			
-//			PersonalityDataWriter.writeFile(alpha, train, "train.csv");
-//			PersonalityDataWriter.writeFile(alpha, test, "test.csv");
 			HashMap<String, PersonalityData> map = PersonalityDataReader.readPersonalityData("train.csv");
 			System.out.println("Size: " + map.size());
 			List<Map.Entry<String, PersonalityData>> list = new LinkedList<>(map.entrySet());
