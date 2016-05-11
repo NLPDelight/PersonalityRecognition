@@ -48,8 +48,12 @@ public class PersonalityData {
 	}
 	
 	public PersonalityData addToCombinedText(String post) {
-		combinedText += " " + post;
+		combinedText += " " + stripQuotes(post);
 		return this;
+	}
+	
+	private String stripQuotes(String s) {
+		return s.replaceAll("\"", "");
 	}
 	
 	public String getCombinedText() {
@@ -59,6 +63,15 @@ public class PersonalityData {
 	public PersonalityData setCombinedText(String combinedText) {
 		this.combinedText = combinedText;
 		return this;
+	}
+	
+	public double[] getClassesAsNumericArray() {
+		return new double[] { asNumber(extraversionClass), asNumber(neuroticClass), asNumber(opennessClass),
+				asNumber(agreeablenessClass), asNumber(conscientiousnessClass)};
+	}
+	
+	private double asNumber(boolean bool) {
+		return bool ? 1 : 0;
 	}
 
 	public PersonalityData normalize() {

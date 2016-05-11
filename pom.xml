@@ -38,5 +38,10 @@
 			<artifactId>lucene-analyzers-common</artifactId>
 			<version>5.5.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.beykery</groupId>
+			<artifactId>neuroph</artifactId>
+			<version>2.92</version>
+		</dependency>
   </dependencies>
 </project>
