@@ -50,6 +50,13 @@ public class PersonalityData {
 		}
 		return this;
 	}
+	
+	public PersonalityData addWordFrequency(String word, double frequency) {
+		if(wordFrequencies == null)
+			wordFrequencies = new HashMap<String, Double>();
+		wordFrequencies.put(word, frequency);
+		return this;
+	}
 
 	public PersonalityData addPost(String post) {
 		this.posts.add(post);
