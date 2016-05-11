@@ -2,7 +2,7 @@ package io.personalityrecognition.util;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Set;
 
 public class PersonalityData {
 
@@ -78,6 +78,10 @@ public class PersonalityData {
 	public PersonalityData addPost(String post) {
 		this.posts.add(post);
 		return this;
+	}
+
+	public Set<String> getPosts() {
+		return posts;
 	}
 
 	public String getUserId() {

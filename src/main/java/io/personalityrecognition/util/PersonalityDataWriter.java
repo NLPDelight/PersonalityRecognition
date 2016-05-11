@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class PersonalityDataWriter{
 	
@@ -24,8 +25,8 @@ public class PersonalityDataWriter{
 	private static final String NEUROTIC_CLASS = "cNEU";
 	private static final String CONSCIENTIOUSNESS_CLASS = "cCON";
 	private static final String AGREEABLENESS_CLASS = "cAGR";
-	private static final String COMBINED_TEXT = "Raw Text";
-	
+	private static final String POSTS = "posts";
+
 	public static void writeFile(List<String> wordsToShow, Map<String, PersonalityData> data, String filename) throws IOException {
 		BufferedWriter csvWriter = new BufferedWriter(new FileWriter(filename));
 		csvWriter.append(getHeaderRow(wordsToShow) + "\n");
@@ -52,8 +53,9 @@ public class PersonalityDataWriter{
 				wrapInQuotes(AGREEABLENESS_SCORE) + "," +
 				wrapInQuotes(CONSCIENTIOUSNESS_SCORE) + "," +
 				wrapInQuotes(OPENNESS_SCORE) + "," +
-				wrapInQuotes(COMBINED_TEXT) + "," +
+				wrapInQuotes(POSTS) + "," +
 				wordsToCSV(wordsToShow);
+
 	}
 	
 	private static String wordsToCSV(List<String> words) {
@@ -79,8 +81,23 @@ public class PersonalityDataWriter{
 				data.getAgreeablenessScore() + "," +
 				data.getConscientiousnessScore() + "," +
 				data.getOpennessScore() + "," +
-				wrapInQuotes(data.getCombinedText());
+				getPosts(data);
+
 		return csvString + frequenciesToCSV(data, wordsToShow);
+	}
+
+	private static String getPosts(PersonalityData data) {
+		Set<String> posts = data.getPosts();
+
+		StringBuilder sb = new StringBuilder();
+
+		for (String s : posts) {
+			s = s.replace("\"", "\"\"");
+			sb.append(s);
+			sb.append('\n');
+		}
+
+		return wrapInQuotes(sb.toString());
 	}
 	
 	private static String frequenciesToCSV(PersonalityData data, List<String> wordsToShow) {
