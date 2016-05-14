@@ -9,23 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static io.personalityrecognition.util.DatasetKeys.*;
+
 public class PersonalityDataWriter{
-	
-	private static final String HAS_CLASS = "y";
-	private static final String DOES_NOT_HAVE_CLASS = "n";
-	private static final String ID = "#AUTHID";
-	private static final String TEXT = "STATUS";
-	private static final String EXTRAVERT_SCORE = "sEXT";
-	private static final String OPENNESS_SCORE = "sOPN";
-	private static final String NEUROTIC_SCORE = "sNEU";
-	private static final String CONSCIENTIOUSNESS_SCORE = "sCON";
-	private static final String AGREEABLENESS_SCORE = "sAGR";
-	private static final String EXTRAVERT_CLASS = "cEXT";
-	private static final String OPENNESS_CLASS = "cOPN";
-	private static final String NEUROTIC_CLASS = "cNEU";
-	private static final String CONSCIENTIOUSNESS_CLASS = "cCON";
-	private static final String AGREEABLENESS_CLASS = "cAGR";
-	private static final String POSTS = "posts";
 
 	public static void writeFile(List<String> wordsToShow, Map<String, PersonalityData> data, String filename) throws IOException {
 		BufferedWriter csvWriter = new BufferedWriter(new FileWriter(filename));
