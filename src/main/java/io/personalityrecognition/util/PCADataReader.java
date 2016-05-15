@@ -13,8 +13,8 @@ import static io.personalityrecognition.util.DatasetKeys.*;
 
 public class PCADataReader {
 	
-	public static final String INDEPENDENT = "independent";
-	public static final String DEPENDENT = "dependent";
+	public static final String INDEPENDENT_VARIABLES = "independent";
+	public static final String DEPENDENT_VARIABLES = "dependent";
 	
 	public static List<Map<String, double[]>> readPCAFile(String fileName)
 			throws FileNotFoundException, UnsupportedEncodingException, IOException {
@@ -23,8 +23,9 @@ public class PCADataReader {
 		
 		for(Map<String, String> row : data) {
 			HashMap<String, double[]> newRow = new HashMap<String, double[]>();
-			newRow.put(INDEPENDENT, getDimensions(row));
-			newRow.put(DEPENDENT, getTraits(row));
+			newRow.put(INDEPENDENT_VARIABLES, getDimensions(row));
+			newRow.put(DEPENDENT_VARIABLES, getTraits(row));
+			vectors.add(newRow);
 		}
 		
 		return vectors;

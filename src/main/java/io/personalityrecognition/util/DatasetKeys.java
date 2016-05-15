@@ -1,7 +1,8 @@
 package io.personalityrecognition.util;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 
 public class DatasetKeys {
 
@@ -21,14 +22,14 @@ public class DatasetKeys {
 	public static final String LANGUAGE_MODEL = "en-token.bin";
 	public static final String POSTS = "posts";
 	public static final String STOPWORDS = "stopwordList.txt";
-	public static final String TEXT = "STATUS";
-	public static final HashSet<String> TRAIT_CLASSES;
-	public static final HashSet<String> TRAIT_SCORES;
+	public static final String TEXT = "TEXT";
+	public static final List<String> TRAIT_CLASSES;
+	public static final List<String> TRAIT_SCORES;
 
 	static {
-		TRAIT_CLASSES = new HashSet<>(Arrays.asList(EXTRAVERT_CLASS, OPENNESS_CLASS, NEUROTIC_CLASS,
+		TRAIT_CLASSES = new ArrayList<>(Arrays.asList(EXTRAVERT_CLASS, OPENNESS_CLASS, NEUROTIC_CLASS,
 			CONSCIENTIOUSNESS_CLASS, AGREEABLENESS_CLASS));
-		TRAIT_SCORES = new HashSet<>(Arrays.asList(EXTRAVERT_SCORE, OPENNESS_SCORE, NEUROTIC_SCORE,
+		TRAIT_SCORES = new ArrayList<>(Arrays.asList(EXTRAVERT_SCORE, OPENNESS_SCORE, NEUROTIC_SCORE,
 			CONSCIENTIOUSNESS_SCORE, AGREEABLENESS_SCORE));
 	}
 }

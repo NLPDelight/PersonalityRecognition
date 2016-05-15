@@ -34,37 +34,38 @@ public class PersonalityRecognition {
 	
 	private static final String[] TRAITS = new String[] { "Extraverion", "Neuroticism", "Openness", "Agreeableness", "Conscientiousness" };
 	private static final int TRAIT_COUNT = 5;
+	private static final double TRAINING_RATIO = .8;
 	private static List<String> WORDS;
 
 	public static void main(String args[]) {
 		try {
-//			getWordOrder("test.csv");
-//			RBFNetwork rbf = newRBFNetwork();
-//			trainNeuralNetwork(rbf, "train.csv", "rbf.nnet");
-			
-//			int hiddenNodes = (WORDS.size() + TRAIT_COUNT) / 2;
-//			createTrainedNeuralNetwork("train.csv", "multi_layer_perceptron.nnet", hiddenNodes);
-//			NeuralNetwork nn = NeuralNetwork.createFromFile(new File("basic_perceptron.nnet"));
-//			double[][] results = test(nn, "test.csv");
-//			double[][] basis = basisFunction("train.csv");
-//			for(int i = 0; i < TRAIT_COUNT; i++) {
-//				System.out.println(TRAITS[i]);
-//				System.out.println("Correct: " + (results[i][1] + results[i][2]));
-//				System.out.println("True Positive: " + results[i][2]);
-//				System.out.println("True Negative: " + results[i][1]);
-//				System.out.println("False Positive: " + results[i][0]);
-//				System.out.println("False Negative: " + results[i][3]);
-//			}
-			
-//			Matrix train = dataAsMatrix("train.csv");
-//			System.out.println("Training Rows: " + train.getRowDimension() + "\nTraining Columns: " + train.getColumnDimension());
-//			Matrix test = dataAsMatrix("test.csv");
-//			PCA pca = new PCA(train);
-//			Matrix transformed = pca.transform(test, PCA.TransformationType.WHITENING);
+//			DataShaper shaper = new DataShaper("essays.csv");
+//			HashMap<String, PersonalityData> data = shaper.shapeData().getUsers();
+//			int trainingSetCount = (int) (TRAINING_RATIO * data.size());
+//			HashMap<String, PersonalityData> train = new HashMap<String, PersonalityData>();
+//			HashMap<String, PersonalityData> test = new HashMap<String, PersonalityData>();
+//			List<String> wordOrder = new LinkedList<>(shaper.getAcceptedTokens());
+//			Collections.sort(wordOrder);
+//			int count = 0;
 //			
-//			System.out.println("Input dimensions: " + pca.getInputDimsNo() + "\nOutput dimensions: " + pca.getOutputDimsNo());
-//			System.out.println("Rows: " + transformed.getRowDimension() + "\nColumns: " + transformed.getColumnDimension());
-			PCADataWriter.writeDataAsPCA("train.csv", "test.csv", "pca_data_studio");
+//			for(String id : data.keySet()) {
+//				if(count < trainingSetCount)
+//					train.put(id, data.get(id));
+//				else
+//					test.put(id, data.get(id));
+//				count++;
+//			}
+//			
+//			PersonalityDataWriter.writeFile(wordOrder, train, "essay_train.csv");
+//			PersonalityDataWriter.writeFile(wordOrder, test, "essay_test.csv");
+			
+			PCADataWriter.writeDataAsPCA("essay_train.csv","essay_test.csv","pca_essay");
+//			Map<String, double[]> results = TestRunner.runPCATest("Multi.nnet", "pca_data_test.csv");
+//			for(String trait : results.keySet()) {
+//				double[] numbers = results.get(trait);
+//				String line = trait + ": " + numbers[0] + " " + numbers[1] + " " + numbers[2] + " " + numbers[3];
+//				System.out.println(line);
+//			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -35,12 +35,12 @@ public class PersonalityDataReader {
 			.isOpen(row.get(OPENNESS_CLASS))
 			.isExtraverted(row.get(EXTRAVERT_CLASS))
 			.isNeurotic(row.get(NEUROTIC_CLASS))
-			.isConscientious(row.get(CONSCIENTIOUSNESS_CLASS))
-			.setAgreeablenessScore(Double.parseDouble(row.get(AGREEABLENESS_SCORE)))
-			.setOpennessScore(Double.parseDouble(row.get(OPENNESS_SCORE)))
-			.setExtraversionScore(Double.parseDouble(row.get(EXTRAVERT_SCORE)))
-			.setNeuroticScore(Double.parseDouble(row.get(NEUROTIC_SCORE)))
-			.setConscientiousnessScore(Double.parseDouble(row.get(CONSCIENTIOUSNESS_SCORE)));
+			.isConscientious(row.get(CONSCIENTIOUSNESS_CLASS));
+//			.setAgreeablenessScore(Double.parseDouble(row.get(AGREEABLENESS_SCORE)))
+//			.setOpennessScore(Double.parseDouble(row.get(OPENNESS_SCORE)))
+//			.setExtraversionScore(Double.parseDouble(row.get(EXTRAVERT_SCORE)))
+//			.setNeuroticScore(Double.parseDouble(row.get(NEUROTIC_SCORE)))
+//			.setConscientiousnessScore(Double.parseDouble(row.get(CONSCIENTIOUSNESS_SCORE)));
 
 		String raw = row.get(POSTS);
 

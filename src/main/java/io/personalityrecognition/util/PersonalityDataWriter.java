@@ -34,12 +34,13 @@ public class PersonalityDataWriter{
 				wrapInQuotes(AGREEABLENESS_CLASS) + "," +
 				wrapInQuotes(CONSCIENTIOUSNESS_CLASS) + "," +
 				wrapInQuotes(OPENNESS_CLASS) + "," +
-				wrapInQuotes(EXTRAVERT_SCORE) + "," +
-				wrapInQuotes(NEUROTIC_SCORE) + "," +
-				wrapInQuotes(AGREEABLENESS_SCORE) + "," +
-				wrapInQuotes(CONSCIENTIOUSNESS_SCORE) + "," +
-				wrapInQuotes(OPENNESS_SCORE) + "," +
-				wrapInQuotes(POSTS) + "," +
+				wrapInQuotes(POSTS) +
+//				wrapInQuotes(EXTRAVERT_SCORE) + "," +
+//				wrapInQuotes(NEUROTIC_SCORE) + "," +
+//				wrapInQuotes(AGREEABLENESS_SCORE) + "," +
+//				wrapInQuotes(CONSCIENTIOUSNESS_SCORE) + "," +
+//				wrapInQuotes(OPENNESS_SCORE) + "," +
+//				wrapInQuotes(POSTS) + "," +
 				wordsToCSV(wordsToShow);
 
 	}
@@ -47,7 +48,7 @@ public class PersonalityDataWriter{
 	private static String wordsToCSV(List<String> words) {
 		String csvString = "";
 		for(int i = 0; i < words.size(); i++) {
-			csvString += "," + wrapInQuotes(words.get(i));
+			csvString += "," + wrapInQuotes(escapeIllegalTextCharacters(words.get(i)));
 		}
 		return csvString;
 	}
@@ -62,11 +63,11 @@ public class PersonalityDataWriter{
 				personalityClassToString(data.isAgreeable()) + "," +
 				personalityClassToString(data.isConscientious()) + "," +
 				personalityClassToString(data.isOpen()) + "," +
-				data.getExtraversionScore() + "," +
-				data.getNeuroticScore() + "," +
-				data.getAgreeablenessScore() + "," +
-				data.getConscientiousnessScore() + "," +
-				data.getOpennessScore() + "," +
+//				data.getExtraversionScore() + "," +
+//				data.getNeuroticScore() + "," +
+//				data.getAgreeablenessScore() + "," +
+//				data.getConscientiousnessScore() + "," +
+//				data.getOpennessScore() + "," +
 				getPosts(data);
 
 		return csvString + frequenciesToCSV(data, wordsToShow);
@@ -80,10 +81,13 @@ public class PersonalityDataWriter{
 		for (String s : posts) {
 			s = s.replace("\"", "\"\"");
 			sb.append(s);
-			sb.append('\n');
 		}
 
 		return wrapInQuotes(sb.toString());
+	}
+	
+	private static String escapeIllegalTextCharacters(String raw) {
+		return raw.replace("\"", "\"\"");
 	}
 	
 	private static String frequenciesToCSV(PersonalityData data, List<String> wordsToShow) {
