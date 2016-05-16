@@ -43,5 +43,10 @@
 			<artifactId>neuroph</artifactId>
 			<version>2.92</version>
 		</dependency>
+		<dependency>
+		    <groupId>com.mkobos</groupId>
+		    <artifactId>pca_transform</artifactId>
+		    <version>1.0.2</version>
+		</dependency>
   </dependencies>
 </project>

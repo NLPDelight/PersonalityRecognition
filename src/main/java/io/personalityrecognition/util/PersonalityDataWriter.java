@@ -26,6 +26,17 @@ public class PersonalityDataWriter{
 		csvWriter.close();
 	}
 	
+	public static void writeFileAsNeurophDataSet(List<String> wordsToShow, Map<String, PersonalityData> data,
+			String filename) throws IOException {
+		BufferedWriter csvWriter = new BufferedWriter(new FileWriter(filename));
+		for(String id : data.keySet()) {
+			PersonalityData row = data.get(id);
+			row.normalize();
+			String csvRow = frequenciesToCSV(row, wordsToShow) + "," + join(row.getClassesAsNumericArray());
+			csvWriter.append(csvRow + "\n");
+		}
+	}
+	
 	private static String getHeaderRow(List<String> wordsToShow) {
 		return 
 				wrapInQuotes(ID) + "," +
@@ -34,15 +45,19 @@ public class PersonalityDataWriter{
 				wrapInQuotes(AGREEABLENESS_CLASS) + "," +
 				wrapInQuotes(CONSCIENTIOUSNESS_CLASS) + "," +
 				wrapInQuotes(OPENNESS_CLASS) + "," +
-				wrapInQuotes(POSTS) +
-//				wrapInQuotes(EXTRAVERT_SCORE) + "," +
-//				wrapInQuotes(NEUROTIC_SCORE) + "," +
-//				wrapInQuotes(AGREEABLENESS_SCORE) + "," +
-//				wrapInQuotes(CONSCIENTIOUSNESS_SCORE) + "," +
-//				wrapInQuotes(OPENNESS_SCORE) + "," +
-//				wrapInQuotes(POSTS) + "," +
+				wrapInQuotes(POSTS) + "," +
 				wordsToCSV(wordsToShow);
 
+	}
+	
+	private static String join(double[] array) {
+		if(array.length == 0)
+			return "";
+		String str = "" + array[0];
+		for(int i = 1; i < array.length; i++) {
+			str += "," + array[i];
+		}
+		return str;
 	}
 	
 	private static String wordsToCSV(List<String> words) {
@@ -63,11 +78,6 @@ public class PersonalityDataWriter{
 				personalityClassToString(data.isAgreeable()) + "," +
 				personalityClassToString(data.isConscientious()) + "," +
 				personalityClassToString(data.isOpen()) + "," +
-//				data.getExtraversionScore() + "," +
-//				data.getNeuroticScore() + "," +
-//				data.getAgreeablenessScore() + "," +
-//				data.getConscientiousnessScore() + "," +
-//				data.getOpennessScore() + "," +
 				getPosts(data);
 
 		return csvString + frequenciesToCSV(data, wordsToShow);
@@ -92,13 +102,16 @@ public class PersonalityDataWriter{
 	
 	private static String frequenciesToCSV(PersonalityData data, List<String> wordsToShow) {
 		HashMap<String, Double> wordFrequencies = data.getWordFrequencies();
-		String csvString = "";
-		for(int i = 0; i < wordsToShow.size(); i++) {
-			double frequency = wordFrequencies.get(wordsToShow.get(i)) != null ?
-							   wordFrequencies.get(wordsToShow.get(i)) : 0;
+		String csvString = getWordFrequencyValue(wordFrequencies.get(0)).toString();
+		for(int i = 1; i < wordsToShow.size(); i++) {
+			double frequency = getWordFrequencyValue(wordFrequencies.get(wordsToShow.get(i)));
 			csvString += "," + frequency;
 		}
 		return csvString;
+	}
+	
+	private static Double getWordFrequencyValue(Double input) {
+		return input == null ? 0 : input;
 	}
 	
 	private static String personalityClassToString(boolean hasClass) {

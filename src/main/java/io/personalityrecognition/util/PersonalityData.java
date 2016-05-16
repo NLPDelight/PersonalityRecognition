@@ -1,5 +1,7 @@
 package io.personalityrecognition.util;
 
+import static io.personalityrecognition.util.DatasetKeys.TRAIT_CLASSES;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,7 +47,7 @@ public class PersonalityData {
 	}
 	
 	public double[] getClassesAsNumericArray() {
-		return new double[] { asNumber(extraversionClass), asNumber(neuroticClass), asNumber(opennessClass),
+		return new double[] { asNumber(extraversionClass), asNumber(opennessClass), asNumber(neuroticClass),
 				asNumber(agreeablenessClass), asNumber(conscientiousnessClass)};
 	}
 	
@@ -65,6 +67,10 @@ public class PersonalityData {
 			wordFrequencies = new HashMap<String, Double>();
 		wordFrequencies.put(word, frequency);
 		return this;
+	}
+	
+	private double booleanAsDouble(boolean bool) {
+		return bool ? 1 : 0;
 	}
 
 	public PersonalityData addPost(String post) {
