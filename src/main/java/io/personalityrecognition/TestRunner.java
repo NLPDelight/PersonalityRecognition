@@ -28,9 +28,12 @@ public class TestRunner {
 	public static final String FP = "FP";
 	public static final String FN = "FN";
 	public static final String TN = "TN";
-	public static final String RECALL = "recall";
-	public static final String PRECISION = "precision";
-	public static final String ACCURACY = "accuracy";
+	public static final String RECALL = "Recall";
+	public static final String PRECISION = "Precision";
+	public static final String ACCURACY = "Accuracy";
+	public static final String SPECIFICITY = "Specificity";
+	public static final String NEGATIVE_PREDICTIVE_VALUE = "Negative Predictive Value";
+	public static final String F_MEASURE = "F Measure";
 	
 	
 	private NeuralNetwork networkUnderTest;
@@ -44,6 +47,12 @@ public class TestRunner {
 	public TestRunner(String neuralNetworkFile, String testFile) {
 		this.networkUnderTest = NeuralNetwork.createFromFile(new File(neuralNetworkFile));
 		this.testFile = testFile;
+	}
+	
+	public Map<String, Map<String, Double>> runPCATest() throws FileNotFoundException, UnsupportedEncodingException, IOException {
+		List<Map<String, double[]>> testData = PCADataReader.readPCAFile(testFile);
+		double[][] results = testPCAData(testData);
+		return interpretResults(addTraitKeys(results));
 	}
 	
 	public Map<String, Map<String, Double>> runWordFrequencyTest(List<String> inputFeatures)
@@ -75,6 +84,9 @@ public class TestRunner {
 		results.put(ACCURACY, getAccuracy(confusionMatrix));
 		results.put(PRECISION, getPrecision(confusionMatrix));
 		results.put(RECALL, getRecall(confusionMatrix));
+		results.put(SPECIFICITY, getSpecificity(confusionMatrix));
+		results.put(NEGATIVE_PREDICTIVE_VALUE, getNegativePredictiveValue(confusionMatrix));
+		results.put(F_MEASURE, getFMeasure(confusionMatrix));
 		return results;
 	}
 	
@@ -90,14 +102,26 @@ public class TestRunner {
 		return confusionMatrix[TRUE_POSITIVE] / (confusionMatrix[TRUE_POSITIVE] + confusionMatrix[FALSE_POSITIVE]);
 	}
 	
+	private double getSpecificity(double[] confusionMatrix) {
+		return confusionMatrix[TRUE_NEGATIVE] / (confusionMatrix[TRUE_NEGATIVE] + confusionMatrix[FALSE_POSITIVE]);
+	}
+	
+	private double getNegativePredictiveValue(double[] confusionMatrix) {
+		return confusionMatrix[TRUE_NEGATIVE] / (confusionMatrix[TRUE_NEGATIVE] + confusionMatrix[FALSE_NEGATIVE]);
+	}
+	
+	private double getFMeasure(double[] confusionMatrix) {
+		double numerator = 2 * confusionMatrix[TRUE_POSITIVE];
+		double denominator = numerator + confusionMatrix[FALSE_NEGATIVE] + confusionMatrix[FALSE_POSITIVE];
+		return numerator / denominator;
+	}
+	
 	private double matrixTotal(double[] matrix) {
 		double total = 0;
 		for(int i = 0; i < matrix.length; i++)
 			total += matrix[i];
 		return total;
 	}
-		
-
 	
 	private double[][] runWordFrequencyTest(HashMap<String, PersonalityData> testData, List<String> inputFeatures) {
 		double[][] results = new double[TRAIT_CLASSES.size()][POSSIBLE_OUTCOMES];
@@ -123,12 +147,6 @@ public class TestRunner {
 			ret[i] = frequencies.get(features.get(i));
 		}
 		return ret;
-	}
-	
-	private Map<String, double[]> runPCATest() throws FileNotFoundException, UnsupportedEncodingException, IOException {
-		List<Map<String, double[]>> testData = PCADataReader.readPCAFile(testFile);
-		double[][] results = testPCAData(testData);
-		return addTraitKeys(results);
 	}
 	
 	private Map<String, double[]> addTraitKeys(double[][] unlabeledData) {
