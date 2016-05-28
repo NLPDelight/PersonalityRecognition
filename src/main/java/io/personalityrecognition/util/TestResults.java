@@ -35,7 +35,9 @@ public class TestResults {
 		return trait;
 	}
 
-	public TestResults(Double truePositives, Double falsePositives, Double trueNegatives, Double falseNegatives) {
+	public TestResults(String trait, String model, Double truePositives, Double falsePositives, Double trueNegatives, Double falseNegatives) {
+		this.trait = trait;
+		this.model = model;
 		this.truePositives = truePositives;
 		this.falsePositives = falsePositives;
 		this.trueNegatives = trueNegatives;
