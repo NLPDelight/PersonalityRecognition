@@ -43,19 +43,47 @@ public class PersonalityRecognition {
 	private static final int TRAIT_COUNT = 5;
 	private static final double TRAINING_RATIO = .8;
 	private static final String TRAINING_FILE = "essay_train.csv";
-	private static final String TEST_FILE = "pca_data_test.csv";
 	private static final String TRAIT_PRINT_FORMAT = "    %s\n";
 	private static final String PRINT_FORMAT = "        %-25s %10.5f\n";
+	private static final String PCA_TEST_DATA = "my_personality/pca/pca_data_test.csv";
+	private static final String FB_TEST_DATA = "my_personality/non_pca/my_personality_test.csv";
+	private static final String ESSAY_TEST_DATA = "essay/essay_test.csv";
+	private static final String RBF_PCA_NN = "my_personality/pca/facebook_pca_RBF.nnet";
+	private static final String FB_PERCEPTRON_NN = "my_personality/non_pca/fb_single.nnet";
+	private static final String FB_MULTI_NN = "my_personality/non_pca/fb_Multi.nnet";
+	private static final String ESSAY_PERCEPTRON_NN = "essay/essay_single";
+	private static final String ESSAY_MULTI_NN = "essay/essay_multilayer";
+	
 	private static List<String> WORDS;
 
 	public static void main(String args[]) {
 		try {
-			NeuralNetwork nn = NeuralNetwork.createFromFile("facebook_pca_RBF.nnet");
-			TestRunner tr = new TestRunner(nn, TEST_FILE);
-			printResults("RBF with Principal Component Analysis", tr.runPCATest());
+			TestRunner fb_rbf = new TestRunner(RBF_PCA_NN, PCA_TEST_DATA);
+			TestRunner fb_perceptron = new TestRunner(FB_PERCEPTRON_NN, FB_TEST_DATA);
+			TestRunner fb_multi = new TestRunner(FB_MULTI_NN, FB_TEST_DATA);
+			TestRunner essay_perceptron = new TestRunner(ESSAY_PERCEPTRON_NN, ESSAY_TEST_DATA);
+			TestRunner essay_multi = new TestRunner(ESSAY_MULTI_NN, ESSAY_TEST_DATA);
+			
+			System.out.println("MY_PERSONALITY (FACEBOOK) DATA RESULTS");
+			
+			getWordOrder(FB_TEST_DATA);
+			printResults("Single Perceptron", fb_perceptron.runWordFrequencyTest(WORDS));
+			printResults("Multilayer Perceptron", fb_multi.runWordFrequencyTest(WORDS));
+			printResults("RBF Network on PCA data", fb_rbf.runPCATest());
+			
+			
+			System.out.println("STREAM OF CONSCIOUSNESS ESSAY RESULTS");
+			
+			getWordOrder(ESSAY_TEST_DATA);
+			printResults("Single Perceptron", essay_perceptron.runWordFrequencyTest(WORDS));
+			printResults("Multilayer Perceptron", essay_multi.runWordFrequencyTest(WORDS));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private static void printLogisticRegressionResults() {
+		
 	}
 	
 	private static RBFNetwork newRBFNetwork(int ins, int hidden, int outs, int iterations) {
@@ -83,12 +111,6 @@ public class PersonalityRecognition {
 		learningRule.setMaxIterations(iterations);
 		nn.setLearningRule(learningRule);
 		return nn;
-	} 
-	
-	private static TestResults[] trainAndTestNetwork(NeuralNetwork nn, String outputFile) throws FileNotFoundException, UnsupportedEncodingException, IOException {
-		Trainer.train(nn, TRAINING_FILE, WORDS, outputFile);
-		return new TestRunner(nn, TEST_FILE).runWordFrequencyTest(WORDS);
-		
 	}
 	
 	private static void printResults(String header, TestResults[] results) {

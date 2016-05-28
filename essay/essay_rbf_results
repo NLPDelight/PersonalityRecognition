@@ -1,0 +1,55 @@
+cEXT: 
+Accuracy: 0.5020242914979757
+Specificity: 1.0
+Precision: NaN
+Negative Predictive Value: 0.5020242914979757
+F Measure: 0.0
+FN: 246.0
+FP: 0.0
+TN: 248.0
+Recall: 0.0
+TP: 0.0
+cCON: 
+Accuracy: 0.46356275303643724
+Specificity: 1.0
+Precision: NaN
+Negative Predictive Value: 0.46356275303643724
+F Measure: 0.0
+FN: 265.0
+FP: 0.0
+TN: 229.0
+Recall: 0.0
+TP: 0.0
+cOPN: 
+Accuracy: 0.5
+Specificity: 1.0
+Precision: NaN
+Negative Predictive Value: 0.5
+F Measure: 0.0
+FN: 247.0
+FP: 0.0
+TN: 247.0
+Recall: 0.0
+TP: 0.0
+cAGR: 
+Accuracy: 0.5242914979757085
+Specificity: 1.0
+Precision: NaN
+Negative Predictive Value: 0.5242914979757085
+F Measure: 0.0
+FN: 235.0
+FP: 0.0
+TN: 259.0
+Recall: 0.0
+TP: 0.0
+cNEU: 
+Accuracy: 0.4898785425101215
+Specificity: 1.0
+Precision: NaN
+Negative Predictive Value: 0.4898785425101215
+F Measure: 0.0
+FN: 252.0
+FP: 0.0
+TN: 242.0
+Recall: 0.0
+TP: 0.0

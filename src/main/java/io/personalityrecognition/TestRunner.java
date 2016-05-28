@@ -74,7 +74,7 @@ public class TestRunner {
 		for(String trait : confusionMatrices.keySet()) {
 			results[i] = confusionMatrixToResults(confusionMatrices.get(trait));
 			results[i].setTrait(trait);
-			i++;
+			++i;
 		}
 		return results;
 	}
