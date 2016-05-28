@@ -12,10 +12,28 @@ public class TestResults {
 	private Double npv;
 	private Double specificity;
 	private Double fMeasure;
+	private String model;
+	private String trait;
 	
 	
-	public TestResults() {
-		
+	public TestResults() {}
+	
+	public TestResults setModel(String model) {
+		this.model = model;
+		return this;
+	}
+	
+	public String getModel() {
+		return model;
+	}
+	
+	public TestResults setTrait(String trait) {
+		this.trait = trait;
+		return this;
+	}
+	
+	public String getTrait() {
+		return trait;
 	}
 	
 	public TestResults setTruePositives(Double truePositives) {
