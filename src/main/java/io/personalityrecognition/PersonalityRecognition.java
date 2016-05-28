@@ -127,14 +127,14 @@ public class PersonalityRecognition {
 
 	private static void printResults(String header, TestResults[] results) {
 		System.out.println(header);
-		for(int i = 0; i < results.length; i++) {
-			printHeaderLine(results[i].getTrait());
-			printScoreLine("Accuracy", results[i].getAccuracy());
-			printScoreLine("Precision", results[i].getPrecision());
-			printScoreLine("Recall", results[i].getRecall());
-			printScoreLine("F-Measure", results[i].getFMeasure());
-			printScoreLine("Specificity", results[i].getSpecificity());
-			printScoreLine("Negative Predictive Value", results[i].getNPV());
+		for (TestResults result : results) {
+			printHeaderLine(result.getTrait());
+			printScoreLine("Accuracy", result.getAccuracy());
+			printScoreLine("Precision", result.getPrecision());
+			printScoreLine("Recall", result.getRecall());
+			printScoreLine("F-Measure", result.getFMeasure());
+			printScoreLine("Specificity", result.getSpecificity());
+			printScoreLine("Negative Predictive Value", result.getNPV());
 		}
 	}
 
