@@ -30,41 +30,17 @@ import opennlp.tools.tokenize.TokenizerModel;
 import org.apache.mahout.classifier.sgd.OnlineLogisticRegression;
 
 public class LogisticRegressionTest {
+	public void prepareDataSets(String datasetPath, String dataset) throws IOException {
+		prepareSet(datasetPath + "_train.csv", dataset);
 
-	public static void main(String[] args) throws Exception {
-		LogisticRegressionTest m = new LogisticRegressionTest();
-
-		//m.prepareDataSets();
-
-		Map<String, Map<String, Map<String, Double>>> allResults = m.testSuite();
-
-		for (Entry<String, Map<String, Map<String, Double>>> results : allResults.entrySet()) {
-			for (Entry<String, Map<String, Double>> entry : results.getValue().entrySet()) {
-				System.out.println("Current Test and Type is: " + results.getKey() + "-" + entry.getKey());
-
-				for (Entry<String, Double> e2 : entry.getValue().entrySet()) {
-					System.out.println(e2.getKey() + " is " + e2.getValue());
-				}
-			}
-		}
+		prepareTest(datasetPath + "_test.csv", dataset);
 	}
 
-	public void prepareDataSets() throws IOException {
-		for (String dataset : DATASETS) {
-			prepareSet(dataset + "_train.csv", dataset);
-
-			prepareTest(dataset + "_test.csv", dataset);
-		}
-
-	}
-
-	public Map<String, Map<String, Map<String, Double>>> testSuite() throws Exception {
+	public Map<String, Map<String, Map<String, Double>>> testSuite(String dataset) throws Exception {
 		Map<String, Map<String, Map<String, Double>>> resultsMap = new HashMap<>();
 
-		for (String dataset : DATASETS) {
-			for (String test : TESTS) {
-				resultsMap.put(dataset + "-" + test, runTest(dataset, test));
-			}
+		for (String test : TESTS) {
+			resultsMap.put(test, runTest(dataset, test));
 		}
 
 		return resultsMap;
@@ -543,7 +519,8 @@ public class LogisticRegressionTest {
 
 	private Map<String, List<String>> _wordBank;
 	private Path _fileStorePath = Paths.get("trainedData");
-	private static final String[] DATASETS = new String[]{"essay", "message"};
+	private static final String[] DATASETPATHS = new String[]{"essay/essay", "my_personality/non_pca/my_personality"};
+	private static final String[] DATASETS = new String[]{"essay", "my_personality"};
 	private static final String[] TESTS = new String[]{"unigram", "bigram", "trigram"};
 	private static final String[] TRAITS = new String[]{"Openness", "Conscientiousness", "Extraversion", "Agreeableness", "Neuroticism"};
 }
