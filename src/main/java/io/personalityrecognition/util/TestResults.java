@@ -66,7 +66,7 @@ public class TestResults {
 		checkArgumentsAndThrow();
 
 		if(accuracy == null)
-			accuracy = (truePositives + falsePositives) / (truePositives + trueNegatives + falsePositives + falseNegatives);
+			accuracy = (truePositives + trueNegatives) / (truePositives + trueNegatives + falsePositives + falseNegatives);
 
 		return accuracy;
 	}
