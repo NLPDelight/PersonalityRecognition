@@ -36,28 +36,41 @@ public class LogisticRegressionTest {
 
 //		m.prepareDataSets();
 
-		Map<String, Map<String, Double>> resultMap = m.testSuite("message", "bigram");
+		Map<String, Map<String, Map<String, Double>>> allResults = m.testSuite();
 
-		for (Entry<String, Map<String, Double>> entry : resultMap.entrySet()) {
-			System.out.println("Current Type is: " + entry.getKey());
+		for (Entry<String, Map<String, Map<String, Double>>> results : allResults.entrySet()) {
+			for (Entry<String, Map<String, Double>> entry : results.getValue().entrySet()) {
+				System.out.println("Current Test and Type is: " + results.getKey() + "-" + entry.getKey());
 
-			for (Entry<String, Double> e2 : entry.getValue().entrySet()) {
-				System.out.println(e2.getKey() + " is " + e2.getValue());
+				for (Entry<String, Double> e2 : entry.getValue().entrySet()) {
+					System.out.println(e2.getKey() + " is " + e2.getValue());
+				}
 			}
 		}
 	}
 
 	public void prepareDataSets() throws IOException {
-		prepareSet("essay_train.csv", "essay");
+		for (String dataset : DATASETS) {
+			prepareSet(dataset + "_train.csv", dataset);
 
-		prepareTest("essay_test.csv", "essay");
+			prepareTest(dataset + "_test.csv", dataset);
+		}
 
-		prepareSet("train.csv", "message");
-
-		prepareTest("test.csv", "message");
 	}
 
-	public Map<String, Map<String, Double>> testSuite(String datasetName, String datasetType) throws Exception {
+	public Map<String, Map<String, Map<String, Double>>> testSuite() throws Exception {
+		Map<String, Map<String, Map<String, Double>>> resultsMap = new HashMap<>();
+
+		for (String dataset : DATASETS) {
+			for (String test : TESTS) {
+				resultsMap.put(dataset + "-" + test, runTest(dataset, test));
+			}
+		}
+
+		return resultsMap;
+	}
+
+	public Map<String, Map<String, Double>> runTest(String datasetName, String datasetType) throws Exception {
 		HashMap<String, Map<String, Double>> bigramMap = SerializerUtil.loadSerial(_fileStorePath.resolve(datasetName + "-" + datasetType));
 
 		HashMap<String, Map<String, Map<String, Double>>> bigramTestMap = SerializerUtil.loadSerialTest(_fileStorePath.resolve(datasetName + "-test-" + datasetType));
@@ -70,8 +83,6 @@ public class LogisticRegressionTest {
 
 		for (String type : TRAITS) {
 			Map<String, Double> currentTypeResultMap = new HashMap<>();
-
-			System.out.println("testing type is: " + type);
 
 			Map<String, Map<String, Double>> bigramTestType = bigramTestMap.get(type);
 
@@ -150,7 +161,6 @@ public class LogisticRegressionTest {
 
 			List<Observation> trainingData = lRU.parseInput(trimmedMapA, trimmedMapB);
 
-			System.out.println("training: " + type);
 			olrMap.put(type, lRU.testMethod(trainingData));
 		}
 
@@ -533,5 +543,7 @@ public class LogisticRegressionTest {
 
 	private Map<String, List<String>> _wordBank;
 	private Path _fileStorePath = Paths.get("trainedData");
+	private static final String[] DATASETS = new String[]{"essay", "message"};
+	private static final String[] TESTS = new String[]{"unigram", "bigram", "trigram"};
 	private static final String[] TRAITS = new String[]{"Openness", "Conscientiousness", "Extraversion", "Agreeableness", "Neuroticism"};
 }
