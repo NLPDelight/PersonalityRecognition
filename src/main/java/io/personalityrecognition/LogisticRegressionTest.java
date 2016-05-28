@@ -34,7 +34,7 @@ public class LogisticRegressionTest {
 	public static void main(String[] args) throws Exception {
 		LogisticRegressionTest m = new LogisticRegressionTest();
 
-//		m.prepareDataSets();
+		//m.prepareDataSets();
 
 		Map<String, Map<String, Double>> resultMap = m.testSuite("message", "bigram");
 
