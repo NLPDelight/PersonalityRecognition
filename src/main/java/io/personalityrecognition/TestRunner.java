@@ -14,6 +14,7 @@ import org.neuroph.core.NeuralNetwork;
 import io.personalityrecognition.util.PCADataReader;
 import io.personalityrecognition.util.PersonalityData;
 import io.personalityrecognition.util.PersonalityDataReader;
+import io.personalityrecognition.util.TestResults;
 import static io.personalityrecognition.util.PCADataReader.*;
 import static io.personalityrecognition.util.DatasetKeys.*;
 
@@ -49,78 +50,42 @@ public class TestRunner {
 		this.testFile = testFile;
 	}
 	
-	public Map<String, Map<String, Double>> runPCATest() throws FileNotFoundException, UnsupportedEncodingException, IOException {
+	public TestResults[] runPCATest() throws FileNotFoundException, UnsupportedEncodingException, IOException {
 		List<Map<String, double[]>> testData = PCADataReader.readPCAFile(testFile);
 		double[][] results = testPCAData(testData);
 		return interpretResults(addTraitKeys(results));
 	}
 	
-	public Map<String, Map<String, Double>> runWordFrequencyTest(List<String> inputFeatures)
+	public TestResults[] runWordFrequencyTest(List<String> inputFeatures)
 			throws FileNotFoundException, UnsupportedEncodingException, IOException {
 		HashMap<String, PersonalityData> testData = PersonalityDataReader.readPersonalityData(testFile);
 		return getTestResults(testData, inputFeatures);
 	}
 	
-	private Map<String, Map<String, Double>> getTestResults(HashMap<String, PersonalityData> testData,
+	private TestResults[] getTestResults(HashMap<String, PersonalityData> testData,
 			List<String> inputFeatures) {
 		double[][] results = runWordFrequencyTest(testData, inputFeatures);
 		return interpretResults(addTraitKeys(results));
 	}
 	
-	private Map<String, Map<String, Double>> interpretResults(Map<String, double[]> confusionMatrices) {
-		Map<String, Map<String, Double>> results = new HashMap<>();
+	private TestResults[] interpretResults(Map<String, double[]> confusionMatrices) {
+		TestResults[] results = new TestResults[confusionMatrices.size()];
+		int i = 0;
 		for(String trait : confusionMatrices.keySet()) {
-			results.put(trait, confusionMatrixToResults(confusionMatrices.get(trait)));
+			results[i] = confusionMatrixToResults(confusionMatrices.get(trait));
+			results[i].setTrait(trait);
+			i++;
 		}
 		return results;
 	}
 	
-	private Map<String, Double> confusionMatrixToResults(double[] confusionMatrix) {
-		Map<String, Double> results = new HashMap<>();
-		results.put(TP, confusionMatrix[TRUE_POSITIVE]);
-		results.put(FP, confusionMatrix[FALSE_POSITIVE]);
-		results.put(FN, confusionMatrix[FALSE_NEGATIVE]);
-		results.put(TN, confusionMatrix[TRUE_NEGATIVE]);
-		results.put(ACCURACY, getAccuracy(confusionMatrix));
-		results.put(PRECISION, getPrecision(confusionMatrix));
-		results.put(RECALL, getRecall(confusionMatrix));
-		results.put(SPECIFICITY, getSpecificity(confusionMatrix));
-		results.put(NEGATIVE_PREDICTIVE_VALUE, getNegativePredictiveValue(confusionMatrix));
-		results.put(F_MEASURE, getFMeasure(confusionMatrix));
+	private TestResults confusionMatrixToResults(double[] confusionMatrix) {
+		TestResults results = new TestResults()
+			.setTruePositives(confusionMatrix[TRUE_POSITIVE])
+			.setFalsePositives(confusionMatrix[FALSE_POSITIVE])
+			.setTrueNegatives(confusionMatrix[TRUE_NEGATIVE])
+			.setFalseNegatives(confusionMatrix[FALSE_NEGATIVE]);
 		return results;
-	}
-	
-	private double getAccuracy(double[] confusionMatrix) {
-		return (confusionMatrix[TRUE_POSITIVE] + confusionMatrix[TRUE_NEGATIVE]) / matrixTotal(confusionMatrix);
-	}
-	
-	private double getRecall(double[] confusionMatrix) {
-		return confusionMatrix[TRUE_POSITIVE] / (confusionMatrix[TRUE_POSITIVE] + confusionMatrix[FALSE_NEGATIVE]);
-	}
-	
-	private double getPrecision(double[] confusionMatrix) {
-		return confusionMatrix[TRUE_POSITIVE] / (confusionMatrix[TRUE_POSITIVE] + confusionMatrix[FALSE_POSITIVE]);
-	}
-	
-	private double getSpecificity(double[] confusionMatrix) {
-		return confusionMatrix[TRUE_NEGATIVE] / (confusionMatrix[TRUE_NEGATIVE] + confusionMatrix[FALSE_POSITIVE]);
-	}
-	
-	private double getNegativePredictiveValue(double[] confusionMatrix) {
-		return confusionMatrix[TRUE_NEGATIVE] / (confusionMatrix[TRUE_NEGATIVE] + confusionMatrix[FALSE_NEGATIVE]);
-	}
-	
-	private double getFMeasure(double[] confusionMatrix) {
-		double numerator = 2 * confusionMatrix[TRUE_POSITIVE];
-		double denominator = numerator + confusionMatrix[FALSE_NEGATIVE] + confusionMatrix[FALSE_POSITIVE];
-		return numerator / denominator;
-	}
-	
-	private double matrixTotal(double[] matrix) {
-		double total = 0;
-		for(int i = 0; i < matrix.length; i++)
-			total += matrix[i];
-		return total;
 	}
 	
 	private double[][] runWordFrequencyTest(HashMap<String, PersonalityData> testData, List<String> inputFeatures) {

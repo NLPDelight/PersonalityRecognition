@@ -5,6 +5,7 @@ import io.personalityrecognition.util.PCADataWriter;
 import io.personalityrecognition.util.PersonalityData;
 import io.personalityrecognition.util.PersonalityDataReader;
 import io.personalityrecognition.util.PersonalityDataWriter;
+import io.personalityrecognition.util.TestResults;
 import Jama.Matrix;
 
 import com.mkobos.pca_transform.*;
@@ -43,13 +44,15 @@ public class PersonalityRecognition {
 	private static final double TRAINING_RATIO = .8;
 	private static final String TRAINING_FILE = "essay_train.csv";
 	private static final String TEST_FILE = "pca_data_test.csv";
+	private static final String TRAIT_PRINT_FORMAT = "    %s\n";
+	private static final String PRINT_FORMAT = "        %-25s %10.5f\n";
 	private static List<String> WORDS;
 
 	public static void main(String args[]) {
 		try {
 			NeuralNetwork nn = NeuralNetwork.createFromFile("facebook_pca_RBF.nnet");
 			TestRunner tr = new TestRunner(nn, TEST_FILE);
-			printResults(tr.runPCATest());
+			printResults("RBF with Principal Component Analysis", tr.runPCATest());
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -82,20 +85,31 @@ public class PersonalityRecognition {
 		return nn;
 	} 
 	
-	private static Map<String, Map<String, Double>> trainAndTestNetwork(NeuralNetwork nn, String outputFile) throws FileNotFoundException, UnsupportedEncodingException, IOException {
+	private static TestResults[] trainAndTestNetwork(NeuralNetwork nn, String outputFile) throws FileNotFoundException, UnsupportedEncodingException, IOException {
 		Trainer.train(nn, TRAINING_FILE, WORDS, outputFile);
 		return new TestRunner(nn, TEST_FILE).runWordFrequencyTest(WORDS);
 		
 	}
 	
-	private static void printResults(Map<String, Map<String, Double>> results) {
-		for(String trait : results.keySet()) {
-			Map<String, Double> traitResults = results.get(trait);
-			System.out.println(trait + ": ");
-			for(String result : traitResults.keySet()) {
-				System.out.println(result + ": " + traitResults.get(result));
-			}
+	private static void printResults(String header, TestResults[] results) {
+		System.out.println(header);
+		for(int i = 0; i < results.length; i++) {
+			printHeaderLine(results[i].getTrait());
+			printScoreLine("Accuracy", results[i].getAccuracy());
+			printScoreLine("Precision", results[i].getPrecision());
+			printScoreLine("Recall", results[i].getRecall());
+			printScoreLine("F-Measure", results[i].getFMeasure());
+			printScoreLine("Specificity", results[i].getSpecificity());
+			printScoreLine("Negative Predictive Value", results[i].getNPV());
 		}
+	}
+	
+	private static void printScoreLine(String metric, double score) {
+		System.out.format(PRINT_FORMAT, metric, score);
+	}
+	
+	private static void printHeaderLine(String header) {
+		System.out.format(TRAIT_PRINT_FORMAT, header);
 	}
 	
 	private static void getWordOrder(String filename) throws FileNotFoundException, UnsupportedEncodingException, IOException {
