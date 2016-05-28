@@ -42,17 +42,14 @@ public class PersonalityRecognition {
 	private static final int TRAIT_COUNT = 5;
 	private static final double TRAINING_RATIO = .8;
 	private static final String TRAINING_FILE = "essay_train.csv";
-	private static final String TEST_FILE = "essay_test.csv";
+	private static final String TEST_FILE = "pca_data_test.csv";
 	private static List<String> WORDS;
 
 	public static void main(String args[]) {
 		try {
-			getWordOrder(TRAINING_FILE);
-			System.out.println("Creating new neural network ...");
-			RBFNetwork nn = newRBFNetwork(1000, 32, 5, 1000);
-			System.out.println("Training ...");
-			Map<String, Map<String, Double>> testResults = trainAndTestNetwork(nn, "essay_rbf");
-			printResults(testResults);
+			NeuralNetwork nn = NeuralNetwork.createFromFile("facebook_pca_RBF.nnet");
+			TestRunner tr = new TestRunner(nn, TEST_FILE);
+			printResults(tr.runPCATest());
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
