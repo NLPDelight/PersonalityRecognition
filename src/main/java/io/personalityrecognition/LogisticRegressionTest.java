@@ -30,13 +30,19 @@ import opennlp.tools.tokenize.TokenizerModel;
 import org.apache.mahout.classifier.sgd.OnlineLogisticRegression;
 
 public class LogisticRegressionTest {
-	public void prepareDataSets(String datasetPath, String dataset) throws IOException {
-		prepareSet(datasetPath + "_train.csv", dataset);
+	public void prepareDataSets() throws IOException {
+		for (int i = 0; i < DATASETS.length; i++) {
+			prepareSet(DATASETPATHS[i] + "_train.csv", DATASETS[i]);
 
-		prepareTest(datasetPath + "_test.csv", dataset);
+			prepareTest(DATASETPATHS[i] + "_test.csv", DATASETS[i]);
+		}
 	}
 
 	public Map<String, Map<String, Map<String, Double>>> testSuite(String dataset) throws Exception {
+		if (!Files.exists(_fileStorePath)) {
+			prepareDataSets();
+		}
+
 		Map<String, Map<String, Map<String, Double>>> resultsMap = new HashMap<>();
 
 		for (String test : TESTS) {
@@ -47,7 +53,8 @@ public class LogisticRegressionTest {
 	}
 
 	public Map<String, Map<String, Double>> runTest(String datasetName, String datasetType) throws Exception {
-		HashMap<String, Map<String, Double>> bigramMap = SerializerUtil.loadSerial(_fileStorePath.resolve(datasetName + "-" + datasetType));
+		HashMap<String, Map<String, Double>> bigramMap =
+			SerializerUtil.loadSerial(_fileStorePath.resolve(datasetName + "-" + datasetType));
 
 		HashMap<String, Map<String, Map<String, Double>>> bigramTestMap = SerializerUtil.loadSerialTest(_fileStorePath.resolve(datasetName + "-test-" + datasetType));
 

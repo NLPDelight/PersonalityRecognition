@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Scanner;
 import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.nnet.Perceptron;
 import org.neuroph.nnet.RBFNetwork;
@@ -40,36 +41,69 @@ public class PersonalityRecognition {
 	private static List<String> WORDS;
 
 	public static void main(String args[]) throws Exception {
-		printAll();
+		Scanner scan = new Scanner(System.in);
+		System.out.println("Personality Recognition");
+		System.out.println("Please select from the following options: ");
+		System.out.println("1. Print All Results");
+		System.out.println("2. Print Essay dataset Results");
+		System.out.println("3. Print My-Personality dataset Results");
+		System.out.println("4. Print results from a particular test");
+		System.out.print("input: ");
+		String s = scan.next();
+
+		switch (s){
+			case "1" :
+				printAll();
+				break;
+			case "2" :
+				printEssay();
+				break;
+			case "3" :
+				printMyPersonality();
+				break;
+			case "4" :
+				printSingle();
+				break;
+		}
 	}
 
 	private static void printAll() {
 		try {
-			TestRunner fb_rbf = new TestRunner(RBF_PCA_NN, PCA_TEST_DATA);
-			TestRunner fb_perceptron = new TestRunner(FB_PERCEPTRON_NN, FB_TEST_DATA);
-			TestRunner fb_multi = new TestRunner(FB_MULTI_NN, FB_TEST_DATA);
-			TestRunner essay_perceptron = new TestRunner(ESSAY_PERCEPTRON_NN, ESSAY_TEST_DATA);
-			TestRunner essay_multi = new TestRunner(ESSAY_MULTI_NN, ESSAY_TEST_DATA);
+			printMyPersonality();
 
-			System.out.println("MY_PERSONALITY (FACEBOOK) DATA RESULTS");
-
-			getWordOrder(FB_TEST_DATA);
-			printResults("Single Perceptron", fb_perceptron.runWordFrequencyTest(WORDS));
-			printResults("Multilayer Perceptron", fb_multi.runWordFrequencyTest(WORDS));
-			printResults("RBF Network on PCA data", fb_rbf.runPCATest());
-			printLogisticRegressionResults("my_personality");
-
-			System.out.println("STREAM OF CONSCIOUSNESS ESSAY RESULTS");
-
-			getWordOrder(ESSAY_TEST_DATA);
-			printResults("Single Perceptron", essay_perceptron.runWordFrequencyTest(WORDS));
-			printResults("Multilayer Perceptron", essay_multi.runWordFrequencyTest(WORDS));
-			printLogisticRegressionResults("essay");
+			printEssay();
 
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
+
+	private static void printEssay() throws Exception {
+		TestRunner essay_perceptron = new TestRunner(ESSAY_PERCEPTRON_NN, ESSAY_TEST_DATA);
+		TestRunner essay_multi = new TestRunner(ESSAY_MULTI_NN, ESSAY_TEST_DATA);
+
+		System.out.println("STREAM OF CONSCIOUSNESS ESSAY RESULTS");
+
+		getWordOrder(ESSAY_TEST_DATA);
+		printResults("Single Perceptron", essay_perceptron.runWordFrequencyTest(WORDS));
+		printResults("Multilayer Perceptron", essay_multi.runWordFrequencyTest(WORDS));
+		printLogisticRegressionResults("essay");
+	}
+
+	private static void printMyPersonality() throws Exception {
+		TestRunner fb_rbf = new TestRunner(RBF_PCA_NN, PCA_TEST_DATA);
+		TestRunner fb_perceptron = new TestRunner(FB_PERCEPTRON_NN, FB_TEST_DATA);
+		TestRunner fb_multi = new TestRunner(FB_MULTI_NN, FB_TEST_DATA);
+
+		System.out.println("MY_PERSONALITY (FACEBOOK) DATA RESULTS");
+
+		getWordOrder(FB_TEST_DATA);
+		printResults("Single Perceptron", fb_perceptron.runWordFrequencyTest(WORDS));
+		printResults("Multilayer Perceptron", fb_multi.runWordFrequencyTest(WORDS));
+		printResults("RBF Network on PCA data", fb_rbf.runPCATest());
+		printLogisticRegressionResults("my_personality");
+	}
+
 	private static void printLogisticRegressionResults(String testName) throws Exception {
 		LogisticRegressionTest m = new LogisticRegressionTest();
 
@@ -95,6 +129,64 @@ public class PersonalityRecognition {
 		for (Entry<String, List<TestResults>> entry : resultMap.entrySet()) {
 			List<TestResults> list = entry.getValue();
 			printResults("Logistic Regression " + entry.getKey(), list.toArray(new TestResults[list.size()]));
+		}
+	}
+
+	private static void printSingle() throws Exception {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("Select Test Dataset: ");
+		System.out.println("1. Essay");
+		System.out.println("2. My Personality");
+		System.out.print("input: ");
+		String s = scan.next();
+
+		if (s.equals("1")) {
+			System.out.println("Select Test: ");
+			System.out.println("1. Single Perceptron");
+			System.out.println("2. Multilayer Perceptron");
+			System.out.println("3. Logistic Regression");
+			System.out.print("input: ");
+			s = scan.next();
+
+			TestRunner essay_perceptron = new TestRunner(ESSAY_PERCEPTRON_NN, ESSAY_TEST_DATA);
+			TestRunner essay_multi = new TestRunner(ESSAY_MULTI_NN, ESSAY_TEST_DATA);
+			getWordOrder(ESSAY_TEST_DATA);
+
+			switch (s) {
+				case "1" :
+					printResults("Single Perceptron", essay_perceptron.runWordFrequencyTest(WORDS));
+				case "2" :
+					printResults("Multilayer Perceptron", essay_multi.runWordFrequencyTest(WORDS));
+				case "3" :
+					printLogisticRegressionResults("essay");
+			}
+		}
+
+		if (s.equals("2")) {
+			System.out.println("Select Test: ");
+			System.out.println("1. Single Perceptron");
+			System.out.println("2. Multilayer Perceptron");
+			System.out.println("3. RBF Network on PCA data");
+			System.out.println("4. Logistic Regression");
+			System.out.print("input: ");
+			s = scan.next();
+
+			TestRunner fb_rbf = new TestRunner(RBF_PCA_NN, PCA_TEST_DATA);
+			TestRunner fb_perceptron = new TestRunner(FB_PERCEPTRON_NN, FB_TEST_DATA);
+			TestRunner fb_multi = new TestRunner(FB_MULTI_NN, FB_TEST_DATA);
+
+			getWordOrder(FB_TEST_DATA);
+
+			switch (s) {
+				case "1" :
+					printResults("Single Perceptron", fb_perceptron.runWordFrequencyTest(WORDS));
+				case "2" :
+					printResults("Multilayer Perceptron", fb_multi.runWordFrequencyTest(WORDS));
+				case "3" :
+					printResults("RBF Network on PCA data", fb_rbf.runPCATest());
+				case "4" :
+					printLogisticRegressionResults("my_personality");
+			}
 		}
 	}
 
