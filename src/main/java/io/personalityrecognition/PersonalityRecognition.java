@@ -23,24 +23,8 @@ import org.neuroph.nnet.learning.RBFLearning;
 
 public class PersonalityRecognition {
 
-	private static final String[] TRAITS = new String[] { "Extraverion", "Neuroticism", "Openness", "Agreeableness", "Conscientiousness" };
-	private static final int TRAIT_COUNT = 5;
-	private static final double TRAINING_RATIO = .8;
-	private static final String TRAINING_FILE = "essay_train.csv";
-	private static final String TRAIT_PRINT_FORMAT = "    %s\n";
-	private static final String PRINT_FORMAT = "        %-25s %10.5f\n";
-	private static final String PCA_TEST_DATA = "my_personality/pca/pca_data_test.csv";
-	private static final String FB_TEST_DATA = "my_personality/non_pca/my_personality_test.csv";
-	private static final String ESSAY_TEST_DATA = "essay/essay_test.csv";
-	private static final String RBF_PCA_NN = "my_personality/pca/facebook_pca_RBF.nnet";
-	private static final String FB_PERCEPTRON_NN = "my_personality/non_pca/fb_single.nnet";
-	private static final String FB_MULTI_NN = "my_personality/non_pca/fb_Multi.nnet";
-	private static final String ESSAY_PERCEPTRON_NN = "essay/essay_single";
-	private static final String ESSAY_MULTI_NN = "essay/essay_multilayer";
-
-	private static List<String> WORDS;
-
-	public static void main(String args[]) throws Exception {
+	public static void main(String[] args) {
+		try {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Personality Recognition");
 		System.out.println("Please select from the following options: ");
@@ -64,6 +48,10 @@ public class PersonalityRecognition {
 			case "4" :
 				printSingle();
 				break;
+		}
+		}
+		catch (Exception e) {
+			System.out.println("error");
 		}
 	}
 
@@ -245,4 +233,21 @@ public class PersonalityRecognition {
 		WORDS = new LinkedList<>(firstRow.getWordFrequencies().keySet());
 		Collections.sort(WORDS);
 	}
+
+	private static final String[] TRAITS = new String[] { "Extraverion", "Neuroticism", "Openness", "Agreeableness", "Conscientiousness" };
+	private static final int TRAIT_COUNT = 5;
+	private static final double TRAINING_RATIO = .8;
+	private static final String TRAINING_FILE = "essay_train.csv";
+	private static final String TRAIT_PRINT_FORMAT = "    %s\n";
+	private static final String PRINT_FORMAT = "        %-25s %10.5f\n";
+	private static final String PCA_TEST_DATA = "my_personality/pca/pca_data_test.csv";
+	private static final String FB_TEST_DATA = "my_personality/non_pca/my_personality_test.csv";
+	private static final String ESSAY_TEST_DATA = "essay/essay_test.csv";
+	private static final String RBF_PCA_NN = "my_personality/pca/facebook_pca_RBF.nnet";
+	private static final String FB_PERCEPTRON_NN = "my_personality/non_pca/fb_single.nnet";
+	private static final String FB_MULTI_NN = "my_personality/non_pca/fb_Multi.nnet";
+	private static final String ESSAY_PERCEPTRON_NN = "essay/essay_single";
+	private static final String ESSAY_MULTI_NN = "essay/essay_multilayer";
+
+	private static List<String> WORDS;
 }
