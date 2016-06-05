@@ -19,7 +19,7 @@ import static io.personalityrecognition.util.PCADataReader.*;
 import static io.personalityrecognition.util.DatasetKeys.*;
 
 public class TestRunner {
-	
+
 	public static final int POSSIBLE_OUTCOMES = 4;
 	public static final int TRUE_POSITIVE = 0;
 	public static final int FALSE_POSITIVE = 1;
@@ -35,39 +35,42 @@ public class TestRunner {
 	public static final String SPECIFICITY = "Specificity";
 	public static final String NEGATIVE_PREDICTIVE_VALUE = "Negative Predictive Value";
 	public static final String F_MEASURE = "F Measure";
-	
-	
+
 	private NeuralNetwork networkUnderTest;
 	private String testFile;
-	
+
 	public TestRunner(NeuralNetwork networkUnderTest, String testFile) {
 		this.networkUnderTest = networkUnderTest;
 		this.testFile = testFile;
 	}
-	
+
 	public TestRunner(String neuralNetworkFile, String testFile) {
 		this.networkUnderTest = NeuralNetwork.createFromFile(new File(neuralNetworkFile));
 		this.testFile = testFile;
 	}
-	
+
+	// This method calls PCADataReader on the testFile and returns the interpreted results.
 	public TestResults[] runPCATest() throws FileNotFoundException, UnsupportedEncodingException, IOException {
 		List<Map<String, double[]>> testData = PCADataReader.readPCAFile(testFile);
 		double[][] results = testPCAData(testData);
 		return interpretResults(addTraitKeys(results));
 	}
-	
+
+	// This method runs the word frequency test and returns the results.
 	public TestResults[] runWordFrequencyTest(List<String> inputFeatures)
 			throws FileNotFoundException, UnsupportedEncodingException, IOException {
 		HashMap<String, PersonalityData> testData = PersonalityDataReader.readPersonalityData(testFile);
 		return getTestResults(testData, inputFeatures);
 	}
-	
+
+	// This method calls word frequency test to get its results then returns processed results with interpret results.
 	private TestResults[] getTestResults(HashMap<String, PersonalityData> testData,
 			List<String> inputFeatures) {
 		double[][] results = runWordFrequencyTest(testData, inputFeatures);
 		return interpretResults(addTraitKeys(results));
 	}
-	
+
+	// This method takes in the confusionMatrices and process them into TestResults[]
 	private TestResults[] interpretResults(Map<String, double[]> confusionMatrices) {
 		TestResults[] results = new TestResults[confusionMatrices.size()];
 		int i = 0;
@@ -78,7 +81,8 @@ public class TestRunner {
 		}
 		return results;
 	}
-	
+
+	// This method sets the results by reading confusionMatrix data
 	private TestResults confusionMatrixToResults(double[] confusionMatrix) {
 		TestResults results = new TestResults()
 			.setTruePositives(confusionMatrix[TRUE_POSITIVE])
@@ -87,7 +91,8 @@ public class TestRunner {
 			.setFalseNegatives(confusionMatrix[FALSE_NEGATIVE]);
 		return results;
 	}
-	
+
+	// This method takes in test data and returns results to wordfrequency test.
 	private double[][] runWordFrequencyTest(HashMap<String, PersonalityData> testData, List<String> inputFeatures) {
 		double[][] results = new double[TRAIT_CLASSES.size()][POSSIBLE_OUTCOMES];
 		for(Map.Entry<String, PersonalityData> row : testData.entrySet()) {
@@ -98,13 +103,15 @@ public class TestRunner {
 		}
 		return results;
 	}
-	
+
+	// This method takes a row of data and tests it's word frequency.
 	private int[] testWordFrequencyData(PersonalityData row, List<String> inputFeatures) {
 		double[] inputs = getWordFrequencyValues(row, inputFeatures);
 		double[] outputs = row.getClassesAsNumericArray();
 		return test(inputs, outputs);
 	}
-	
+
+	// This method takes a row of personalitydata and process it's value into double array.
 	private double[] getWordFrequencyValues(PersonalityData row, List<String> features) {
 		Map<String, Double> frequencies = row.getWordFrequencies();
 		double[] ret = new double[features.size()];
@@ -113,7 +120,8 @@ public class TestRunner {
 		}
 		return ret;
 	}
-	
+
+	// This method adds traitkey to the unlabeledData
 	private Map<String, double[]> addTraitKeys(double[][] unlabeledData) {
 		Map<String, double[]> labeled = new HashMap<String, double[]>();
 		for(int i = 0; i < unlabeledData.length; i++) {
@@ -121,7 +129,8 @@ public class TestRunner {
 		}
 		return labeled;
 	}
-	
+
+	// This method tests PCAData and return scores in double matrix
 	private double[][] testPCAData(List<Map<String, double[]>> data) {
 		double[][] scores = new double[TRAIT_CLASSES.size()][POSSIBLE_OUTCOMES];
 		for(Map<String, double[]> row : data) {
@@ -132,29 +141,32 @@ public class TestRunner {
 		}
 		return scores;
 	}
-	
+
+	// This method calls test method on the prcoessed PCA data.
 	private int[] testPCAData(Map<String, double[]> testRow) {
 		double[] traits = testRow.get(DEPENDENT_VARIABLES);
 		double[] features = testRow.get(INDEPENDENT_VARIABLES);
 		return test(features, traits);
 	}
-	
+
+	// This method runs the given test.
 	private int[] test(double[] inputs, double[] expectedOutputs) {
 		networkUnderTest.setInput(inputs);
 		networkUnderTest.calculate();
 		double[] results = networkUnderTest.getOutput();
 		int[] comparison = new int[results.length];
-		
+
 		for(int i = 0; i < results.length; i++) {
 			double predicted = Math.round(results[i]);
 			int confusionMatrixValue = getConfusionMatrixValue(predicted, expectedOutputs[i]);
 			comparison[i] += confusionMatrixValue;
 		}
-		
+
 		return comparison;
-		
+
 	}
-	
+
+	// This method returns confusion matrix value.
 	private int getConfusionMatrixValue(double predicted, double actual) {
 		if(predicted > actual) {
 			return FALSE_POSITIVE;

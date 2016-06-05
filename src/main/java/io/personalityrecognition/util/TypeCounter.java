@@ -16,6 +16,7 @@ import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 
+// This class counts the words from the raw data into tokens and filters out the stopwords.
 public class TypeCounter {
 
 	private Tokenizer tokenizer;

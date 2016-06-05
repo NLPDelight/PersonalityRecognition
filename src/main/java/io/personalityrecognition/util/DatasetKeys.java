@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+// This class is a set of keys to use so we don't need to declare them in every class.
 public class DatasetKeys {
 
 	public static final String EXTRAVERT_SCORE = "sEXT";

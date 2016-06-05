@@ -1,5 +1,6 @@
 package io.personalityrecognition.util;
 
+// This class processes the raw results into the data type we want to output.
 public class TestResults {
 
 	private Double truePositives;
