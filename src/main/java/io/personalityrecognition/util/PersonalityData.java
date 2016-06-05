@@ -1,11 +1,16 @@
 package io.personalityrecognition.util;
 
-import static io.personalityrecognition.util.DatasetKeys.TRAIT_CLASSES;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+	/**
+	 * This class is the container class for each user from the raw dataset. We track each user by the list of variables declared below.
+	 *
+	 * @param
+	 * @return
+	 * @throws
+	 */
 public class PersonalityData {
 
 	private String userId;
@@ -45,12 +50,12 @@ public class PersonalityData {
 		tokenCount += count;
 		return this;
 	}
-	
+
 	public double[] getClassesAsNumericArray() {
 		return new double[] { asNumber(extraversionClass), asNumber(opennessClass), asNumber(neuroticClass),
 				asNumber(agreeablenessClass), asNumber(conscientiousnessClass)};
 	}
-	
+
 	private double asNumber(boolean bool) {
 		return bool ? 1 : 0;
 	}
@@ -61,14 +66,14 @@ public class PersonalityData {
 		}
 		return this;
 	}
-	
+
 	public PersonalityData addWordFrequency(String word, double frequency) {
 		if(wordFrequencies == null)
 			wordFrequencies = new HashMap<String, Double>();
 		wordFrequencies.put(word, frequency);
 		return this;
 	}
-	
+
 	private double booleanAsDouble(boolean bool) {
 		return bool ? 1 : 0;
 	}

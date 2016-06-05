@@ -11,6 +11,13 @@ import java.util.Set;
 
 import static io.personalityrecognition.util.DatasetKeys.*;
 
+/**
+ * This class writes processed PersonalityDataMap to a file for easier access and avoid reprocessing the raw data.
+ *
+ * @param
+ * @return
+ * @throws
+ */
 public class PersonalityDataWriter{
 
 	public static void writeFile(List<String> wordsToShow, Map<String, PersonalityData> data, String filename) throws IOException {
@@ -22,10 +29,10 @@ public class PersonalityDataWriter{
 			String csvRow = toCSVString(wordsToShow, data.get(id));
 			csvWriter.append(csvRow + "\n");
 		}
-		
+
 		csvWriter.close();
 	}
-	
+
 	public static void writeFileAsNeurophDataSet(List<String> wordsToShow, Map<String, PersonalityData> data,
 			String filename) throws IOException {
 		BufferedWriter csvWriter = new BufferedWriter(new FileWriter(filename));
@@ -36,9 +43,9 @@ public class PersonalityDataWriter{
 			csvWriter.append(csvRow + "\n");
 		}
 	}
-	
+
 	private static String getHeaderRow(List<String> wordsToShow) {
-		return 
+		return
 				wrapInQuotes(ID) + "," +
 				wrapInQuotes(EXTRAVERT_CLASS) + "," +
 				wrapInQuotes(NEUROTIC_CLASS) + "," +
@@ -49,7 +56,7 @@ public class PersonalityDataWriter{
 				wordsToCSV(wordsToShow);
 
 	}
-	
+
 	private static String join(double[] array) {
 		if(array.length == 0)
 			return "";
@@ -59,7 +66,7 @@ public class PersonalityDataWriter{
 		}
 		return str;
 	}
-	
+
 	private static String wordsToCSV(List<String> words) {
 		String csvString = "";
 		for(int i = 0; i < words.size(); i++) {
@@ -71,7 +78,7 @@ public class PersonalityDataWriter{
 	private static String toCSVString(List<String> wordsToShow, PersonalityData data) {
 		if(wordsToShow == null)
 			wordsToShow = new LinkedList<String>(data.getWordCounts().keySet());
-		String csvString = 
+		String csvString =
 				wrapInQuotes(data.getUserId()) + "," +
 				personalityClassToString(data.isExtraverted()) + "," +
 				personalityClassToString(data.isNeurotic()) + "," +
@@ -95,11 +102,11 @@ public class PersonalityDataWriter{
 
 		return wrapInQuotes(sb.toString());
 	}
-	
+
 	private static String escapeIllegalTextCharacters(String raw) {
 		return raw.replace("\"", "\"\"");
 	}
-	
+
 	private static String frequenciesToCSV(PersonalityData data, List<String> wordsToShow) {
 		HashMap<String, Double> wordFrequencies = data.getWordFrequencies();
 		String csvString = getWordFrequencyValue(wordFrequencies.get(0)).toString();
@@ -109,17 +116,17 @@ public class PersonalityDataWriter{
 		}
 		return csvString;
 	}
-	
+
 	private static Double getWordFrequencyValue(Double input) {
 		return input == null ? 0 : input;
 	}
-	
+
 	private static String personalityClassToString(boolean hasClass) {
 		String textValue = hasClass ? HAS_CLASS : DOES_NOT_HAVE_CLASS;
 		return wrapInQuotes(textValue);
 	}
 
-	
+
 	private static String wrapInQuotes(String unquotedText) {
 		return String.format("\"%s\"", unquotedText);
 	}

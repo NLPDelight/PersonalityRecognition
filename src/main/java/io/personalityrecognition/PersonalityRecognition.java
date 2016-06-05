@@ -23,39 +23,63 @@ import org.neuroph.nnet.learning.RBFLearning;
 
 public class PersonalityRecognition {
 
+	/**
+	 * This is the main method.
+	 *
+	 */
 	public static void main(String[] args) {
-		try {
-		Scanner scan = new Scanner(System.in);
-		System.out.println("Personality Recognition");
-		System.out.println("Please select from the following options: ");
-		System.out.println("1. Print All Results");
-		System.out.println("2. Print Essay dataset Results");
-		System.out.println("3. Print My-Personality dataset Results");
-		System.out.println("4. Print results from a particular test");
-		System.out.print("input: ");
-		String s = scan.next();
+		PersonalityRecognition pr = new PersonalityRecognition();
 
-		switch (s){
-			case "1" :
-				printAll();
-				break;
-			case "2" :
-				printEssay();
-				break;
-			case "3" :
-				printMyPersonality();
-				break;
-			case "4" :
-				printSingle();
-				break;
-		}
+		pr.run();
+	}
+
+	/**
+	 * This method displays the operations menu.
+	 *
+	 * @param
+	 * @return
+	 * @throws
+	 */
+	public void run() {
+		try {
+			Scanner scan = new Scanner(System.in);
+			System.out.println("Personality Recognition");
+			System.out.println("Please select from the following options: ");
+			System.out.println("1. Print All Results");
+			System.out.println("2. Print Essay dataset Results");
+			System.out.println("3. Print My-Personality dataset Results");
+			System.out.println("4. Print results from a particular test");
+			System.out.print("input: ");
+			String s = scan.next();
+
+			switch (s){
+				case "1" :
+					printAll();
+					break;
+				case "2" :
+					printEssay();
+					break;
+				case "3" :
+					printMyPersonality();
+					break;
+				case "4" :
+					printSingle();
+					break;
+			}
 		}
 		catch (Exception e) {
 			System.out.println("error");
 		}
 	}
 
-	private static void printAll() {
+	/**
+	 * This method will print the results for both Facebook and Essay dataset.
+	 *
+	 * @param
+	 * @return
+	 * @throws
+	 */
+	public void printAll() {
 		try {
 			printMyPersonality();
 
@@ -66,7 +90,14 @@ public class PersonalityRecognition {
 		}
 	}
 
-	private static void printEssay() throws Exception {
+	/**
+	 * This method calls the test runners for Essay dataset
+	 *
+	 * @param
+	 * @return
+	 * @throws
+	 */
+	private void printEssay() throws Exception {
 		TestRunner essay_perceptron = new TestRunner(ESSAY_PERCEPTRON_NN, ESSAY_TEST_DATA);
 		TestRunner essay_multi = new TestRunner(ESSAY_MULTI_NN, ESSAY_TEST_DATA);
 
@@ -78,7 +109,14 @@ public class PersonalityRecognition {
 		printLogisticRegressionResults("essay");
 	}
 
-	private static void printMyPersonality() throws Exception {
+	/**
+	 * This method calls the test runners for Facebook dataset.
+	 *
+	 * @param
+	 * @return
+	 * @throws
+	 */
+	private void printMyPersonality() throws Exception {
 		TestRunner fb_rbf = new TestRunner(RBF_PCA_NN, PCA_TEST_DATA);
 		TestRunner fb_perceptron = new TestRunner(FB_PERCEPTRON_NN, FB_TEST_DATA);
 		TestRunner fb_multi = new TestRunner(FB_MULTI_NN, FB_TEST_DATA);
@@ -92,6 +130,13 @@ public class PersonalityRecognition {
 		printLogisticRegressionResults("my_personality");
 	}
 
+	/**
+	 * This method prints the results for Logistic Regression model.
+	 *
+	 * @param String
+	 * @return
+	 * @throws
+	 */
 	private static void printLogisticRegressionResults(String testName) throws Exception {
 		LogisticRegressionTest m = new LogisticRegressionTest();
 
@@ -120,6 +165,13 @@ public class PersonalityRecognition {
 		}
 	}
 
+	/**
+	 * This method displays the menu if the user only want the results for an individual test.
+	 *
+	 * @param
+	 * @return
+	 * @throws
+	 */
 	private static void printSingle() throws Exception {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Select Test Dataset: ");
@@ -178,6 +230,13 @@ public class PersonalityRecognition {
 		}
 	}
 
+	/**
+	 * This method creates a new RBFNetwork model
+	 *
+	 * @param int, int, int, int
+	 * @return RBFNetwork
+	 * @throws
+	 */
 	private static RBFNetwork newRBFNetwork(int ins, int hidden, int outs, int iterations) {
 		RBFNetwork nn = new RBFNetwork(ins, hidden, outs);
 		RBFLearning learningRule = (RBFLearning) nn.getLearningRule();
@@ -187,6 +246,13 @@ public class PersonalityRecognition {
 		return nn;
 	}
 
+	/**
+	 * This method creates a new PerceptronNetwork model
+	 *
+	 * @param int, int, int
+	 * @return Perceptron
+	 * @throws
+	 */
 	private static Perceptron newPerceptronNetwork(int ins, int outs, int iterations) {
 		Perceptron nn = new Perceptron(ins, outs);
 		PerceptronLearning learningRule = (PerceptronLearning) nn.getLearningRule();
@@ -196,6 +262,13 @@ public class PersonalityRecognition {
 		return nn;
 	}
 
+	/**
+	 * This method creates a new MultiLayered Perceptron model
+	 *
+	 * @param int, int, int, int
+	 * @return MultiLayerPerceptron
+	 * @throws
+	 */
 	private static MultiLayerPerceptron newMultiLayerPerceptronNetwork(int ins, int hidden,  int outs, int iterations) {
 		MultiLayerPerceptron nn = new MultiLayerPerceptron(ins, hidden, outs);
 		BackPropagation learningRule = (BackPropagation) nn.getLearningRule();
@@ -205,6 +278,13 @@ public class PersonalityRecognition {
 		return nn;
 	}
 
+	/**
+	 * This method calls print method for each category of the results
+	 *
+	 * @param String, TestResults[]
+	 * @return
+	 * @throws
+	 */
 	private static void printResults(String header, TestResults[] results) {
 		System.out.println(header);
 		for (TestResults result : results) {
@@ -218,14 +298,35 @@ public class PersonalityRecognition {
 		}
 	}
 
+	/**
+	 * This method prints with the score line format
+	 *
+	 * @param String, double
+	 * @return
+	 * @throws
+	 */
 	private static void printScoreLine(String metric, double score) {
 		System.out.format(PRINT_FORMAT, metric, score);
 	}
 
+	/**
+	 * This method prints with the header line format
+	 *
+	 * @param String
+	 * @return
+	 * @throws
+	 */
 	private static void printHeaderLine(String header) {
 		System.out.format(TRAIT_PRINT_FORMAT, header);
 	}
 
+	/**
+	 * This method gets the word and sorts them in order
+	 *
+	 * @param String
+	 * @return
+	 * @throws
+	 */
 	private static void getWordOrder(String filename) throws FileNotFoundException, UnsupportedEncodingException, IOException {
 		HashMap<String, PersonalityData> map = PersonalityDataReader.readPersonalityData(filename);
 		List<Map.Entry<String, PersonalityData>> list = new LinkedList<>(map.entrySet());
