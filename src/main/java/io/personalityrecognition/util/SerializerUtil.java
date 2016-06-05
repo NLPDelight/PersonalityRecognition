@@ -7,13 +7,23 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
- * @author tom
+ * This class handles the store and load of serialized objects, such as three layer maps, for faster loading
+ *
+ * @param
+ * @return
+ * @throws
  */
 public class SerializerUtil {
+	/**
+	 * This method stores serialized trained map
+	 *
+	 * @param HashMap<String,Map<String, Double>>, Path
+	 * @return
+	 * @throws IOException
+	 */
 	public static void storeSerial(
 			HashMap<String,Map<String, Double>> map, Path filePath)
 		throws IOException{
@@ -28,6 +38,13 @@ public class SerializerUtil {
         fos.close();
 	}
 
+	/**
+	 * This method stores serialized test map
+	 *
+	 * @param HashMap<String,Map<String, Map<String, Double>>>, Path
+	 * @return
+	 * @throws IOException
+	 */
 	public static void storeSerialTest(
 			HashMap<String,Map<String, Map<String, Double>>> map, Path filePath)
 		throws IOException{
@@ -42,6 +59,13 @@ public class SerializerUtil {
         fos.close();
 	}
 
+	/**
+	 * This method loads serialized trained map
+	 *
+	 * @param Path
+	 * @return HashMap<String,Map<String, Double>>
+	 * @throws Exception
+	 */
 	public static HashMap<String,Map<String, Double>> loadSerial(Path filePath)
 		throws Exception {
 
@@ -57,6 +81,13 @@ public class SerializerUtil {
 		return mapInFile;
 	}
 
+	/**
+	 * This method loads serialized test map
+	 *
+	 * @param Path
+	 * @return HashMap<String,Map<String, Map<String, Double>>>
+	 * @throws Exception
+	 */
 	public static HashMap<String,Map<String, Map<String, Double>>> loadSerialTest(Path filePath)
 		throws Exception {
 

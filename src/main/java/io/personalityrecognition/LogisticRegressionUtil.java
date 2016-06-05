@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package io.personalityrecognition;
 
 import java.util.ArrayList;
@@ -17,22 +12,15 @@ import org.apache.mahout.math.Vector;
 import org.apache.mahout.vectorizer.encoders.ConstantValueEncoder;
 import org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder;
 
-/**
- *
- * @author tom
- */
 public class LogisticRegressionUtil {
-	public double test(Map<String, Double> testMap, OnlineLogisticRegression olr) {
 
-		testModel(testMap, olr);
-
-		return 0;
-	}
-
-	public OnlineLogisticRegression testMethod(List<Observation> trainingData) {
-		return train(trainingData);
-	}
-
+	/**
+	 * This method converts the N-gram maps to List<Observations> so they can be put into mahout.
+	 *
+	 * @param Map<String, Double>, Map<String, Double>
+	 * @return List<Observation>
+	 * @throws
+	 */
 	public List<Observation> parseInput(Map<String, Double> map, Map<String, Double> mapB) {
 		List<Observation> result = new ArrayList<>();
 
@@ -47,6 +35,13 @@ public class LogisticRegressionUtil {
 		return result;
 	}
 
+	/**
+	 * This method converts the N-gram maps for test to List<Observations> so they can be put into mahout.
+	 *
+	 * @param Map<String, Double>
+	 * @return List<Observation>
+	 * @throws
+	 */
 	public List<Observation> parseTest(Map<String, Double> list) {
 		List<Observation> result = new ArrayList<>();
 
@@ -57,6 +52,13 @@ public class LogisticRegressionUtil {
 		return result;
 	}
 
+	/**
+	 * This method trains Logistic Regression model using Mahout
+	 *
+	 * @param List<Observation>
+	 * @return OnlineLogisticRegression
+	 * @throws
+	 */
 	public OnlineLogisticRegression train(List<Observation> trainData) {
 		OnlineLogisticRegression olr = new OnlineLogisticRegression(2, 3,
 			new L1());
@@ -80,6 +82,13 @@ public class LogisticRegressionUtil {
 		return olr;
 	}
 
+	/**
+	 * This method tests Logistic Regression model using Mahout
+	 *
+	 * @param Map<String, Double>, OnlineLogisticRegression
+	 * @return double
+	 * @throws
+	 */
 	public double testModel(Map<String, Double> testMap, OnlineLogisticRegression olr) {
 		List<Observation> testData = parseTest(testMap);
 
@@ -101,6 +110,10 @@ public class LogisticRegressionUtil {
 		return sum/testData.size();
 		}
 
+	/**
+	 * This is the class type needed to process data into Mahout
+	 *
+	 */
 	class Observation {
 
 		private DenseVector vector = new DenseVector(3);
