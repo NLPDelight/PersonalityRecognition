@@ -7,12 +7,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-/**
- * @author tom
- */
+// This class handles the store and load of serialized objects, such as three layer maps, for faster loading
 public class SerializerUtil {
 	public static void storeSerial(
 			HashMap<String,Map<String, Double>> map, Path filePath)

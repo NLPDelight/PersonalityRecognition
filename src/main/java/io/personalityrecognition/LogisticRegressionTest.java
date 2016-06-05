@@ -31,6 +31,8 @@ import opennlp.tools.tokenize.TokenizerModel;
 import org.apache.mahout.classifier.sgd.OnlineLogisticRegression;
 
 public class LogisticRegressionTest {
+
+	// This method will prepare all the datasets set in the List datasets
 	public void prepareDataSets() throws IOException {
 		for (int i = 0; i < DATASETS.length; i++) {
 			prepareSet(DATASETPATHS[i] + "_train.csv", DATASETS[i]);
@@ -39,6 +41,7 @@ public class LogisticRegressionTest {
 		}
 	}
 
+	// This method runs the test and returns test results
 	public Map<String, Map<String, Map<String, Double>>> testSuite(String dataset) throws Exception {
 		if (!Files.exists(_fileStorePath)) {
 			prepareDataSets();
@@ -53,9 +56,10 @@ public class LogisticRegressionTest {
 		return resultsMap;
 	}
 
+	// This method runs the test and organizes results
 	public Map<String, Map<String, Double>> runTest(String datasetName, String datasetType) throws Exception {
-		HashMap<String, Map<String, Double>> bigramMap =
-			SerializerUtil.loadSerial(_fileStorePath.resolve(datasetName + "-" + datasetType));
+		HashMap<String, Map<String, Double>> bigramMap
+			= SerializerUtil.loadSerial(_fileStorePath.resolve(datasetName + "-" + datasetType));
 
 		HashMap<String, Map<String, Map<String, Double>>> bigramTestMap = SerializerUtil.loadSerialTest(_fileStorePath.resolve(datasetName + "-test-" + datasetType));
 
@@ -82,7 +86,6 @@ public class LogisticRegressionTest {
 				}
 			}
 
-
 			double sum = 0;
 
 			for (Map<String, Double> user : bigramTestType.values()) {
@@ -94,8 +97,8 @@ public class LogisticRegressionTest {
 				}
 			}
 
-			currentTypeResultMap.put("TP", sum/bigramTestType.size());
-			currentTypeResultMap.put("FN", 1 - sum/bigramTestType.size());
+			currentTypeResultMap.put("TP", sum / bigramTestType.size());
+			currentTypeResultMap.put("FN", 1 - sum / bigramTestType.size());
 
 			sum = 0;
 
@@ -108,8 +111,8 @@ public class LogisticRegressionTest {
 				}
 			}
 
-			currentTypeResultMap.put("FP", sum/bigramTestType.size());
-			currentTypeResultMap.put("TN", 1 - sum/bigramTestType.size());
+			currentTypeResultMap.put("FP", sum / bigramTestType.size());
+			currentTypeResultMap.put("TN", 1 - sum / bigramTestType.size());
 
 			resultMap.put(type, currentTypeResultMap);
 		}
@@ -117,6 +120,7 @@ public class LogisticRegressionTest {
 		return resultMap;
 	}
 
+	// This method generates a map with key of trait and value of OnlineLogisticRegression model
 	public Map<String, OnlineLogisticRegression> getOLRMap(HashMap<String, Map<String, Double>> trainingMap) {
 		Map<String, OnlineLogisticRegression> olrMap = new HashMap<>();
 
@@ -145,12 +149,13 @@ public class LogisticRegressionTest {
 
 			List<Observation> trainingData = lRU.parseInput(trimmedMapA, trimmedMapB);
 
-			olrMap.put(type, lRU.testMethod(trainingData));
+			olrMap.put(type, lRU.train(trainingData));
 		}
 
 		return olrMap;
 	}
 
+	// This method processes the map to return data for training
 	public Map<String, Double> trimMap(Map<String, Double> map) {
 		Map<String, Double> trim = new HashMap<>();
 
@@ -169,6 +174,7 @@ public class LogisticRegressionTest {
 		return trim;
 	}
 
+	// This method processes PersonalityData into N-gram models then saves them as serialized files
 	public void prepareTest(String fileName, String setName) throws IOException {
 		Map<String, PersonalityData> data
 			= PersonalityDataReader.readPersonalityData(fileName);
@@ -256,6 +262,7 @@ public class LogisticRegressionTest {
 		SerializerUtil.storeSerialTest(trigramMap, _fileStorePath.resolve(setName + "-test-trigram"));
 	}
 
+	// This method takes a set of posts and process it into unigram map used in tests
 	private Map<String, Double> _getUnigramTestSet(Set<String> posts) throws IOException {
 		Tokenizer tokenizer = new TokenizerME(
 			new TokenizerModel(new FileInputStream("en-token.bin")));
@@ -295,6 +302,7 @@ public class LogisticRegressionTest {
 		return wordMap;
 	}
 
+	// This method takes a set of posts and process it into n-gram map used in tests
 	private Map<String, Double> _getNGramTestSet(int n, Set<String> posts) throws IOException {
 		Tokenizer tokenizer = new TokenizerME(
 			new TokenizerModel(new FileInputStream("en-token.bin")));
@@ -335,6 +343,7 @@ public class LogisticRegressionTest {
 		return ngrams;
 	}
 
+//This method calls get N-gram methods to process the maps then write them to serialized file for quick loading
 	public void prepareSet(String fileName, String fileType) throws IOException {
 		_populateWordBank(fileName);
 
@@ -377,6 +386,7 @@ public class LogisticRegressionTest {
 		System.out.println("trigram finished at: " + ft.format(new Date()));
 	}
 
+	//This method uses OpenNLP's NgramGenerator to generate N grams and normalizes them. The final result is returned in a map
 	private Map<String, Double> _getNGrams(int n, String personalityType)
 		throws IOException {
 
@@ -422,6 +432,7 @@ public class LogisticRegressionTest {
 		return ngrams;
 	}
 
+	//This method tokenizes the corpus then filters out the stop words. The method returns a map of each token and their normalized weight.
 	private Map<String, Double> _getUnigrams(String personalityType)
 		throws IOException {
 
@@ -466,6 +477,9 @@ public class LogisticRegressionTest {
 		return wordMap;
 	}
 
+	// This method reads all the data from the file and organizes a map where
+	// key is the personality type and value is a list of words written by each
+	// user with the key personality.
 	private void _populateWordBank(String filePath) throws IOException {
 		Map<String, PersonalityData> data
 			= PersonalityDataReader.readPersonalityData(filePath);
@@ -498,6 +512,7 @@ public class LogisticRegressionTest {
 		}
 	}
 
+	// This method gets the value of the map and append to it.
 	private void _appendSet(PersonalityData p, String type) {
 		List<String> list = _wordBank.get(type);
 
@@ -508,6 +523,7 @@ public class LogisticRegressionTest {
 		}
 	}
 
+	//This method sorts the map by its value.
 	public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
 		List<Map.Entry<K, V>> list
 			= new LinkedList<>(map.entrySet());

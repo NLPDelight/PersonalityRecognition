@@ -1,9 +1,7 @@
 package io.personalityrecognition.util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -11,17 +9,13 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import com.mkobos.pca_transform.PCA;
-
-import Jama.Matrix;
 import static io.personalityrecognition.util.DatasetKeys.*;
 
+// This class processes the CSV file into a processed dataset.
 public class DataShaper {
 
 	private static final int WORD_COUNT = 1000;
-	
+
 	private TypeCounter typeCounter;
 	private HashSet<String> acceptedTokens;
 	private HashMap<String, PersonalityData> users;
@@ -34,13 +28,15 @@ public class DataShaper {
 		acceptedTokens = new HashSet<String>();
 	}
 
+	// This method calls the sub methods and returns the processed data.
 	public DataShaper shapeData() throws IOException {
 		determineAcceptedTokens();
 		aggregateDataByUser();
 		calculateUserWordFrequencies();
 		return this;
 	}
-	
+
+	// This method returns the words list in sorted order.
 	public List<String> getWordOrder() {
 		List<Map.Entry<String, PersonalityData>> list = new LinkedList<>(users.entrySet());
 		PersonalityData firstRow = list.get(0).getValue();
@@ -52,7 +48,7 @@ public class DataShaper {
 	public HashMap<String, PersonalityData> getUsers() {
 		return users;
 	}
-	
+
 	public HashSet<String> getAcceptedTokens() {
 		return acceptedTokens;
 	}
@@ -63,6 +59,7 @@ public class DataShaper {
 		}
 	}
 
+	// This method processes each row of the raw dataset
 	private void aggregateDataByUser() throws IOException {
 		List<Map<String, String>> data = CSVMapper.mapCSV(new File(filename));
 		for(Map<String, String> row : data) {
@@ -70,6 +67,7 @@ public class DataShaper {
 		}
 	}
 
+	// This method takes a row in and determine if the user exists or create a new user.
 	private void updateUserValues(Map<String, String> row) {
 		String id = row.get(ID);
 		if(users.containsKey(id)) {
@@ -79,6 +77,7 @@ public class DataShaper {
 		}
 	}
 
+	// This method processes the row into a new user.
 	private void addNewUser(Map<String, String> row) {
 		String id = row.get(ID);
 		PersonalityData newUser = createNewUser(row);
@@ -86,6 +85,7 @@ public class DataShaper {
 		addWordsToUser(row);
 	}
 
+	// This method creates the new user and sets the user's personality traits.
 	private PersonalityData createNewUser(Map<String, String> row) {
 		PersonalityData newUser = new PersonalityData(row.get(ID));
 
@@ -104,6 +104,7 @@ public class DataShaper {
 		return newUser;
 	}
 
+	// This method adds words to the user's word set.
 	private void addWordsToUser(Map<String, String> row) {
 		String id = row.get(ID);
 		String statusText = row.get(TEXT).trim();

@@ -17,10 +17,11 @@ import com.mkobos.pca_transform.PCA;
 import static io.personalityrecognition.util.DatasetKeys.*;
 import Jama.Matrix;
 
+// This class outputs processed PCA data into an output file.
 public class PCADataWriter {
-	
+
 	private static List<String> WORD_ORDER;
-	
+
 	public static void writeDataAsPCA(String trainingFile, String testFile, String dataSetName)
 			throws FileNotFoundException, UnsupportedEncodingException, IOException {
 		List<Map.Entry<String, PersonalityData>> trainingData = orderedData(trainingFile);
@@ -29,16 +30,16 @@ public class PCADataWriter {
 		PCA reducer = doPCA(trainingData);
 		Matrix trainingComponents = transformDataToPCAMatrix(reducer, trainingData);
 		Matrix testComponents = transformDataToPCAMatrix(reducer, testData);
-		
+
 		writePCAData(trainingComponents, trainingData, dataSetName + "_train.csv");
 		writePCAData(testComponents, testData, dataSetName + "_test.csv");
 	}
-	
+
 	private static List<Map.Entry<String, PersonalityData>> orderedData(String fileName)
 			throws FileNotFoundException, UnsupportedEncodingException, IOException {
 		return orderSet(PersonalityDataReader.readPersonalityData(fileName).entrySet());
 	}
-	
+
 	private static void writePCAData(Matrix dimensions, List<Map.Entry<String, PersonalityData>> data, String fileName)
 			throws IOException {
 		BufferedWriter csvWriter = new BufferedWriter(new FileWriter(fileName));
@@ -46,7 +47,7 @@ public class PCADataWriter {
 		csvWriter.append(getCSVBody(dimensions, data));
 		csvWriter.close();
 	}
-	
+
 	private static String getCSVBody(Matrix dimensions, List<Map.Entry<String, PersonalityData>> data) {
 		int rows = dimensions.getRowDimension();
 		int cols = dimensions.getColumnDimension();
@@ -60,7 +61,7 @@ public class PCADataWriter {
 		}
 		return csvBody;
 	}
-	
+
 	private static String csvifyClasses(Map.Entry<String, PersonalityData> row) {
 		PersonalityData user = row.getValue();
 		return
@@ -71,35 +72,35 @@ public class PCADataWriter {
 				booleanToDouble(user.isConscientious()) + "," +
 				booleanToDouble(user.isOpen());
 	}
-	
+
 	private static double booleanToDouble(boolean bool) {
 		return bool ? 1 : 0;
 	}
-	
+
 	private static String getHeaderRow(int dimensions) {
 		String header = wrapInQuotes(ID) + ",";
 		for(String trait : TRAIT_CLASSES) {
 			header += wrapInQuotes(trait) + ",";
 		}
-		
+
 		int dimensionNumber = 1;
 		for(; dimensionNumber < dimensions; dimensionNumber++) {
 			header += wrapInQuotes("D_" + dimensionNumber) + ",";
 		}
-		
+
 		header += wrapInQuotes("D_" + dimensionNumber) + "\n";
 		return header;
-		
+
 	}
-	
+
 	private static Matrix transformDataToPCAMatrix(PCA reducer, List<Map.Entry<String, PersonalityData>> data) {
 		return reducer.transform(dataAsMatrix(data), PCA.TransformationType.WHITENING);
 	}
-	
+
 	private static PCA doPCA(List<Map.Entry<String, PersonalityData>> data) {
 		return new PCA(dataAsMatrix(data));
 	}
-	
+
 	private static Matrix dataAsMatrix(List<Map.Entry<String, PersonalityData>> data) {
 		double[][] matrix = new double[data.size()][1000];
 		int i = 0;
@@ -109,7 +110,7 @@ public class PCADataWriter {
 		}
 		return new Matrix(matrix);
 	}
-	
+
 	public static double[] frequenciesToArray(HashMap<String, Double> data, List<String> wordOrder) {
 		double[] arr = new double[wordOrder.size()];
 		for(int i = 0; i < wordOrder.size(); i++) {
@@ -117,20 +118,20 @@ public class PCADataWriter {
 		}
 		return arr;
 	}
-	
+
 	public static <T> List<String> getRowOrder(HashMap<String, T> data) {
 		return orderSet(data.keySet());
 	}
-	
+
 	public static List<String> getWordOrder(List<Map.Entry<String, PersonalityData>> wordFrequencyData) {
 		PersonalityData firstRow = wordFrequencyData.get(0).getValue();
 		return orderSet(firstRow.getWordFrequencies().keySet());
 	}
-	
+
 	public static <T> List<T> orderSet(Set<T> set) {
 		return new LinkedList<T>(set);
 	}
-	
+
 	private static String wrapInQuotes(String unquotedText) {
 		return String.format("\"%s\"", unquotedText);
 	}
